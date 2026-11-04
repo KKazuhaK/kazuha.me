@@ -1,0 +1,62 @@
+---
+import { getLocale, localizedPath, t } from '../i18n/ui';
+
+interface Crumb {
+  label: string;
+  /** Path without locale prefix; omit for the current page. */
+  href?: string;
+  /** Language of the label when it differs from the page. */
+  lang?: string;
+}
+
+interface Props {
+  items: Crumb[];
+}
+
+const { items } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const trail: Crumb[] = [{ label: t(locale, 'nav_home'), href: '/' }, ...items];
+---
+
+<nav aria-label={t(locale, 'breadcrumb')}>
+  <ol>
+    {trail.map((crumb) => (
+      <li>
+        {crumb.href ? (
+          <a href={localizedPath(locale, crumb.href)}>{crumb.label}</a>
+        ) : (
+          <span aria-current="page" lang={crumb.lang}>
+            {crumb.label}
+          </span>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<style>
+  ol {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 14px;
+    color: var(--text-3);
+  }
+  li + li::before {
+    content: '/';
+    padding: 0 8px;
+  }
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--control-height);
+    color: var(--accent);
+  }
+  span {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--control-height);
+  }
+</style>

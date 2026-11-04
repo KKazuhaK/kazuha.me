@@ -1,27 +1,61 @@
 ---
+import Breadcrumb from '../Breadcrumb.astro';
+import FallbackNotice from '../FallbackNotice.astro';
+import ProjectCard from '../ProjectCard.astro';
+import ProjectFilter from '../ProjectFilter.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getProjects } from '../../i18n/content';
 import { getLocale, t } from '../../i18n/ui';
 
 const locale = getLocale(Astro.currentLocale);
+const projects = await getProjects(locale);
 const title = t(locale, 'projectsTitle');
+const intro = t(locale, 'projectsIntro');
 ---
 
-<BaseLayout title={title}>
+<BaseLayout {title} description={intro}>
+  <Breadcrumb items={[{ label: title }]} />
   <h1>{title}</h1>
-  <p>{t(locale, 'comingSoon')}</p>
+  <p class="intro">{intro}</p>
+  {locale !== 'en' && projects.some((p) => p.fallback) && <FallbackNotice />}
+  <ProjectFilter />
+  <ul class="grid" data-project-grid>
+    {projects.map((project) => (
+      <li data-kind={project.entry.data.kind}>
+        <ProjectCard {project} showMeta headingLevel={2} />
+      </li>
+    ))}
+  </ul>
 </BaseLayout>
 
 <style>
+  :global(.notice) {
+    margin-bottom: var(--space-3);
+  }
   h1 {
-    margin-bottom: var(--space-2);
+    margin: var(--space-1) 0 var(--space-2);
     font-size: 48px;
   }
-  p {
+  .intro {
+    max-width: 680px;
+    margin-bottom: var(--space-3);
+    font-size: 17px;
     color: var(--text-2);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
   @media (max-width: 859.98px) {
     h1 {
       font-size: 38px;
+    }
+    .grid {
+      grid-template-columns: 1fr;
     }
   }
 </style>

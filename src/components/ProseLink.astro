@@ -1,0 +1,21 @@
+---
+import ExternalIcon from './ExternalIcon.astro';
+import { isExternalUrl } from '../config/resolve';
+
+interface Props {
+  href?: string;
+}
+
+const { href = '', ...rest } = Astro.props;
+const external = isExternalUrl(href);
+---
+
+<a
+  {href}
+  {...rest}
+  target={external ? '_blank' : undefined}
+  rel={external ? 'noopener' : undefined}
+>
+  <slot />
+  {external && <ExternalIcon size={13} />}
+</a>

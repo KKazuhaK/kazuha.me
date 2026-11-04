@@ -1,5 +1,6 @@
 ---
 import ExternalIcon from './ExternalIcon.astro';
+import { isExternalUrl } from '../config/resolve';
 
 interface Props {
   href: string;
@@ -15,15 +16,7 @@ const {
   class: className,
 } = Astro.props;
 
-function isExternal(url: string): boolean {
-  if (!/^https?:\/\//i.test(url)) return false;
-  try {
-    return new URL(url).host !== Astro.site?.host;
-  } catch {
-    return false;
-  }
-}
-const external = isExternal(href);
+const external = isExternalUrl(href);
 ---
 
 <a

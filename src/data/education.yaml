@@ -1,0 +1,11 @@
+- id: uci-bs
+  school: University of California, Irvine
+  degree: B.S.
+  field: Computer Science
+  division: Donald Bren School of ICS
+  start: 2024
+  end: 2028
+  expected: true
+  notes:
+    - "Dean's Honor List"
+  url: https://www.ics.uci.edu/

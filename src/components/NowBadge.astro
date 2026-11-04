@@ -1,0 +1,43 @@
+---
+import { site } from '../config/site';
+import { fallbackLang, getLocale, t } from '../i18n/ui';
+
+const locale = getLocale(Astro.currentLocale);
+---
+
+<span class="pill">
+  <span class="dot" aria-hidden="true"></span>
+  <span>
+    {t(locale, 'now')}
+    {t(locale, 'colon')}
+    <span lang={fallbackLang(locale)}>
+      {site.now.label}, {site.now.org}
+    </span>
+  </span>
+</span>
+
+<style>
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    min-height: 36px;
+    padding: 0 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+  }
+  @media (max-width: 859.98px) {
+    .pill {
+      min-height: 32px;
+      padding: 0 12px;
+    }
+  }
+  .dot {
+    flex: 0 0 auto;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--success);
+  }
+</style>

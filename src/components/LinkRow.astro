@@ -1,0 +1,126 @@
+---
+import ExternalIcon from './ExternalIcon.astro';
+
+interface Props {
+  href: string;
+  name: string;
+  sub: string;
+  display: string;
+  mark: string;
+  cta: string;
+  group: 'school' | 'sites' | 'code' | 'contact';
+  external: boolean;
+  /** Language of name/sub/cta when it differs from the page. */
+  lang?: string;
+}
+
+const { href, name, sub, display, mark, cta, group, external, lang } =
+  Astro.props;
+---
+
+<a
+  class="row"
+  {href}
+  target={external ? '_blank' : undefined}
+  rel={external ? 'noopener' : undefined}
+>
+  <span class={`mark ${group}`} aria-hidden="true">
+    {mark}
+  </span>
+  <span class="info">
+    <span class="name" {lang}>
+      {name}
+    </span>
+    <span class="sub" {lang}>
+      {sub}
+    </span>
+    <span class="url">{display}</span>
+  </span>
+  <span class="cta">
+    <span {lang}>{cta}</span>
+    {external && <ExternalIcon size={13} />}
+  </span>
+</a>
+
+<style>
+  .row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 72px;
+    padding: var(--space-2) 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    transition: border-color 0.15s ease;
+  }
+  .row:hover {
+    border-color: var(--accent);
+  }
+  .mark {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .mark.school {
+    background: var(--mark-school-bg);
+    color: var(--mark-school-fg);
+  }
+  .mark.sites {
+    background: var(--mark-sites-bg);
+    color: var(--mark-sites-fg);
+  }
+  .mark.code {
+    background: var(--mark-code-bg);
+    color: var(--mark-code-fg);
+  }
+  .mark.contact {
+    background: var(--mark-contact-bg);
+    color: var(--mark-contact-fg);
+  }
+  .info {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .name {
+    font-weight: 600;
+  }
+  .sub {
+    font-size: 14px;
+    color: var(--text-2);
+  }
+  .url {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-3);
+  }
+  .cta {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 4px;
+    min-height: var(--control-height);
+    padding: 0 14px;
+    border-radius: var(--radius-btn);
+    background: var(--surface-hover);
+    font-size: 14px;
+    font-weight: 600;
+  }
+  @media (max-width: 859.98px) {
+    .url {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,58 @@
+---
+interface Props {
+  period: string;
+  /** Language of the content when it differs from the page (fallback). */
+  lang?: string;
+  periodLang?: string;
+}
+
+const { period, lang, periodLang } = Astro.props;
+---
+
+<div class="entry">
+  <span class="period" lang={periodLang}>
+    {period}
+  </span>
+  <div class="content" {lang}>
+    <slot />
+  </div>
+</div>
+
+<style>
+  .entry {
+    display: grid;
+    grid-template-columns: 170px minmax(0, 1fr);
+    gap: var(--space-2);
+    padding: var(--space-2) 0;
+  }
+  .entry + .entry {
+    border-top: 1px solid var(--border-soft);
+  }
+  .period {
+    padding-top: 2px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-3);
+  }
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .content :global(.primary) {
+    font-weight: 600;
+  }
+  .content :global(.secondary) {
+    color: var(--text-2);
+  }
+  .content :global(.note) {
+    font-size: 14px;
+    color: var(--text-3);
+  }
+  @media (max-width: 859.98px) {
+    .entry {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+  }
+</style>

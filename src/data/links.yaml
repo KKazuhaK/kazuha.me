@@ -1,0 +1,57 @@
+- id: uci-ics
+  order: 1
+  group: school
+  name: UC Irvine · Donald Bren School of ICS
+  sub: Where I study Computer Science
+  url: https://ics.uci.edu/
+  mark: UCI
+  cta: Visit
+- id: notes
+  order: 2
+  group: sites
+  name: Course Notes
+  sub: My study notes, on my UCI web space
+  url: notes
+  mark: N
+  cta: Open
+- id: notes-mirror
+  order: 3
+  group: sites
+  name: Course Notes (mirror)
+  sub: Same notes, if the UCI server is slow
+  url: https://kazuha.infp.info/
+  mark: M
+  cta: Open
+  enabled: false
+- id: github
+  order: 4
+  group: code
+  name: GitHub
+  sub: All my open-source work
+  url: github
+  mark: GH
+  cta: Visit
+- id: anteater-mcp
+  order: 5
+  group: code
+  name: Anteater MCP
+  sub: Source code for my course-planning MCP server
+  url: https://github.com/KKazuhaK/Anteater-MCP
+  mark: A
+  cta: Visit
+- id: email
+  order: 6
+  group: contact
+  name: Email
+  sub: The best way to reach me
+  url: email
+  mark: '@'
+  cta: Email me
+- id: linkedin
+  order: 7
+  group: contact
+  name: LinkedIn
+  sub: Professional profile
+  url: linkedin
+  mark: in
+  cta: Visit

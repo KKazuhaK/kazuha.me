@@ -18,6 +18,25 @@
   --accent: #2448c9;
   --accent-soft: #eef1fb;
   --success: #1f9d55;
+  --border-soft: #eceef2;
+
+  /* project kind tags */
+  --kind-oss-bg: #eef1fb;
+  --kind-oss-fg: #2448c9;
+  --kind-research-bg: #fdeee6;
+  --kind-research-fg: #a8360b;
+  --kind-infra-bg: #e8f5ee;
+  --kind-infra-fg: #1b6b41;
+
+  /* link group marks */
+  --mark-school-bg: #fff5db;
+  --mark-school-fg: #8a6100;
+  --mark-sites-bg: #eef1fb;
+  --mark-sites-fg: #2448c9;
+  --mark-code-bg: #16181d;
+  --mark-code-fg: #ffffff;
+  --mark-contact-bg: #e8f5ee;
+  --mark-contact-fg: #1b6b41;
 
   /* elevation */
   --shadow-menu: 0 12px 24px rgb(22 24 29 / 8%);

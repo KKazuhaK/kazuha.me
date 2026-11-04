@@ -1,54 +1,240 @@
 ---
+import { getCollection } from 'astro:content';
+import FallbackNotice from '../FallbackNotice.astro';
+import Avatar from '../Avatar.astro';
+import NowBadge from '../NowBadge.astro';
+import ProjectCard from '../ProjectCard.astro';
+import QuickLinkTile from '../QuickLinkTile.astro';
+import UpdatesList from '../UpdatesList.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { site } from '../../config/site';
-import { getLocale, t } from '../../i18n/ui';
+import { getProjects } from '../../i18n/content';
+import { fallbackLang, getLocale, localizedPath, t } from '../../i18n/ui';
 
 const locale = getLocale(Astro.currentLocale);
+const featured = (await getProjects(locale)).filter(
+  (p) => p.entry.data.featured,
+);
+const updates = (await getCollection('updates'))
+  .map((e) => e.data)
+  .sort((a, b) => b.date.localeCompare(a.date))
+  .slice(0, 4);
+const textLang = fallbackLang(locale);
+const notesHost = new URL(site.notesUrl).host;
 ---
 
-<BaseLayout>
-  <h1>{site.name}</h1>
-  <p class="tagline">{site.tagline}</p>
-  <p class="now">
-    <span class="dot" aria-hidden="true"></span>
-    <span class="label">{t(locale, 'now')}</span>
-    {' · '}
-    {site.now.label} · {site.now.org}
-  </p>
+<BaseLayout description={site.intro}>
+  <div class="home">
+    {locale !== 'en' && <FallbackNotice />}
+    <div class="hero">
+      <Avatar />
+      <div class="who">
+        <h1>{site.name}</h1>
+        <p class="tagline" lang={textLang}>
+          {site.tagline}
+        </p>
+      </div>
+    </div>
+
+    <div class="pills">
+      <NowBadge />
+      <span class="pill" lang={textLang}>
+        {site.role.title} · {site.role.org}
+      </span>
+    </div>
+
+    <p class="intro" lang={textLang}>
+      {site.intro}
+    </p>
+
+    <section class="tiles-section" aria-labelledby="go-heading">
+      <h2 id="go-heading">{t(locale, 'homeHeading')}</h2>
+      <div class="tiles">
+        <QuickLinkTile
+          href={localizedPath(locale, '/projects')}
+          title={t(locale, 'nav_projects')}
+          sub={t(locale, 'tileProjectsSub')}
+          action={t(locale, 'tileProjectsAction')}
+          icon="grid"
+        />
+        <QuickLinkTile
+          href={localizedPath(locale, '/cv')}
+          title={t(locale, 'nav_cv')}
+          sub={t(locale, 'tileCvSub')}
+          action={t(locale, 'tileCvAction')}
+          icon="doc"
+        />
+        <QuickLinkTile
+          href={site.notesUrl}
+          title={t(locale, 'courseNotes')}
+          sub={t(locale, 'tileNotesSub', { host: notesHost })}
+          action={t(locale, 'tileNotesAction')}
+          icon="book"
+          external
+        />
+        <QuickLinkTile
+          href={localizedPath(locale, '/links')}
+          title={t(locale, 'tileLinksTitle')}
+          sub={t(locale, 'tileLinksSub')}
+          action={t(locale, 'tileLinksAction')}
+          icon="link"
+        />
+      </div>
+    </section>
+
+    <section class="featured">
+      <div class="section-head">
+        <h2>{t(locale, 'featuredProjects')}</h2>
+        <a href={localizedPath(locale, '/projects')}>
+          {t(locale, 'allProjects')}
+        </a>
+      </div>
+      <div class="cards">
+        {featured.map((project) => (
+          <ProjectCard {project} />
+        ))}
+      </div>
+    </section>
+
+    <section class="updates">
+      <h2>{t(locale, 'recentUpdates')}</h2>
+      <UpdatesList {updates} />
+    </section>
+  </div>
 </BaseLayout>
 
 <style>
+  .home {
+    display: flex;
+    flex-direction: column;
+  }
+  .hero {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
   h1 {
     font-size: 60px;
+    line-height: 1.02;
   }
   .tagline {
     margin-top: var(--space-1);
-    font-size: 18px;
     color: var(--text-2);
   }
-  .now {
+  .pills {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    font-size: 15px;
+  }
+  .pill {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-1);
-    margin-top: var(--space-3);
-    padding: 6px 16px;
+    min-height: 36px;
+    padding: 0 14px;
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-pill);
-    background: var(--surface);
-    font-size: 14px;
   }
-  .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--success);
+  .intro {
+    max-width: 680px;
+    margin-top: 20px;
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--text-2);
   }
-  .label {
+  .tiles-section,
+  .featured,
+  .updates {
+    margin-top: var(--section-gap);
+  }
+  h2 {
+    margin-bottom: var(--space-2);
+    font-family: var(--font-sans);
+    font-size: 20px;
     font-weight: 600;
+    line-height: 1.3;
+  }
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-2);
+  }
+  .section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: var(--space-2);
+  }
+  .section-head h2 {
+    margin: 0;
+  }
+  .section-head a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--control-height);
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  .home > :global(.notice) {
+    margin-bottom: var(--space-3);
   }
   @media (max-width: 859.98px) {
     h1 {
       font-size: 38px;
+    }
+    .hero {
+      gap: 12px;
+    }
+    .tagline {
+      margin-top: 4px;
+      font-size: 15px;
+      line-height: 1.4;
+    }
+    .pills {
+      margin-top: 12px;
+      gap: 8px;
+      font-size: 13px;
+    }
+    .pill {
+      min-height: 32px;
+      padding: 0 12px;
+    }
+    /* On mobile the quick links come before the notice and intro sentence. */
+    .tiles-section {
+      margin-top: 20px;
+    }
+    .tiles-section h2 {
+      margin-bottom: 8px;
+    }
+    .tiles {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .home > :global(.notice) {
+      order: 1;
+      margin: var(--space-3) 0 0;
+    }
+    .intro {
+      order: 1;
+      margin-top: var(--space-2);
+      font-size: 17px;
+    }
+    .featured,
+    .updates {
+      order: 2;
+    }
+    .cards {
+      grid-template-columns: 1fr;
     }
   }
 </style>

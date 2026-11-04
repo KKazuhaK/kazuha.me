@@ -1,0 +1,13 @@
+- id: canvas-mcp-prs
+  date: '2026-10-26'
+  text: 14 pull requests merged into Canvas MCP, an open-source MCP server for Canvas LMS.
+  href: /projects/canvas-mcp
+- id: notes-astro
+  date: '2026-10'
+  text: Rebuilt my course-notes site with Astro.
+- id: la-ics32
+  date: '2026-09'
+  text: Learning Assistant for ICS 32 (Fall 2026).
+- id: anchan-join
+  date: '2026-06'
+  text: Joined Anchan Asset Management as Founding Engineer, AI Systems Architecture.

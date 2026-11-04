@@ -1,0 +1,54 @@
+---
+import { isPlaceholder } from '../config/site';
+import { fallbackLang, getLocale, t, type UiKey } from '../i18n/ui';
+
+interface Props {
+  role: string;
+  year: number;
+  stack: string[];
+  status: string;
+  /** True when the text values are English fallback content. */
+  fallback?: boolean;
+}
+
+const { role, year, stack, status, fallback = false } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const allRows: [string, string, boolean][] = [
+  [t(locale, 'metaRole'), role, true],
+  [t(locale, 'metaYear'), String(year), false],
+  [t(locale, 'metaStack'), stack.join(' · '), true],
+  [t(locale, 'metaStatus'), t(locale, `status_${status}` as UiKey), false],
+];
+const rows = allRows.filter(([, value]) => !isPlaceholder(value));
+const textLang = fallback ? fallbackLang(locale) : undefined;
+---
+
+<dl>
+  {rows.map(([label, value, isText]) => (
+    <div>
+      <dt>{label}</dt>
+      <dd lang={isText ? textLang : undefined}>{value}</dd>
+    </div>
+  ))}
+</dl>
+
+<style>
+  dl {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+    margin: 0;
+    padding: var(--space-2) var(--space-3);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+  }
+  dt {
+    font-size: 13px;
+    color: var(--text-3);
+  }
+  dd {
+    margin: 2px 0 0;
+    font-weight: 500;
+  }
+</style>

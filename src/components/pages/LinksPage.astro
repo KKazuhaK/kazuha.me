@@ -1,22 +1,78 @@
 ---
+import { getCollection } from 'astro:content';
+import Breadcrumb from '../Breadcrumb.astro';
+import FallbackNotice from '../FallbackNotice.astro';
+import LinkGroup from '../LinkGroup.astro';
+import LinkRow from '../LinkRow.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getLocale, t } from '../../i18n/ui';
+import { displayUrl, isExternalUrl, resolveUrl } from '../../config/resolve';
+import { fallbackLang, getLocale, t, type UiKey } from '../../i18n/ui';
 
 const locale = getLocale(Astro.currentLocale);
+const groups = ['school', 'sites', 'code', 'contact'] as const;
+
+// Rows whose URL is still a placeholder are dropped.
+const rows = (await getCollection('links'))
+  .map((e) => e.data)
+  .filter((item) => item.enabled)
+  .sort((a, b) => a.order - b.order)
+  .flatMap((item) => {
+    const href = resolveUrl(item.url);
+    return href ? [{ ...item, href }] : [];
+  });
+
 const title = t(locale, 'linksTitle');
+const intro = t(locale, 'linksIntro');
 ---
 
-<BaseLayout title={title}>
-  <h1>{title}</h1>
-  <p>{t(locale, 'comingSoon')}</p>
+<BaseLayout {title} description={intro}>
+  <div class="links">
+    <div class="head">
+      <Breadcrumb items={[{ label: t(locale, 'nav_links') }]} />
+      <h1>{title}</h1>
+      <p class="intro">{intro}</p>
+    </div>
+    {locale !== 'en' && <FallbackNotice />}
+    {groups.map((group) => {
+      const items = rows.filter((r) => r.group === group);
+      return (
+        items.length > 0 && (
+          <LinkGroup title={t(locale, `group_${group}` as UiKey)}>
+            {items.map((item) => (
+              <LinkRow
+                href={item.href}
+                name={item.name}
+                sub={item.sub}
+                display={item.display ?? displayUrl(item.href)}
+                mark={item.mark}
+                cta={item.cta}
+                group={item.group}
+                lang={fallbackLang(locale)}
+                external={isExternalUrl(item.href)}
+              />
+            ))}
+          </LinkGroup>
+        )
+      );
+    })}
+  </div>
 </BaseLayout>
 
 <style>
+  .links {
+    max-width: 820px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
   h1 {
-    margin-bottom: var(--space-2);
+    margin-top: var(--space-1);
     font-size: 48px;
   }
-  p {
+  .intro {
+    margin-top: 12px;
+    font-size: 17px;
     color: var(--text-2);
   }
   @media (max-width: 859.98px) {

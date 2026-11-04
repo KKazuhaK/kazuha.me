@@ -1,0 +1,19 @@
+---
+import { getLocale, t } from '../i18n/ui';
+
+const locale = getLocale(Astro.currentLocale);
+---
+
+<p class="notice" role="note">
+  {t(locale, 'fallbackNotice')}
+</p>
+
+<style>
+  .notice {
+    padding: 12px var(--space-2);
+    background: var(--accent-soft);
+    border-radius: var(--radius-btn);
+    color: var(--text-2);
+    font-size: 14px;
+  }
+</style>

@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig, fontProviders } from 'astro/config';
+import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 
 import { existsSync } from 'node:fs';
@@ -26,7 +27,12 @@ const flatZhNotFound = {
 // https://astro.build/config
 export default defineConfig({
   integrations: [
-    sitemap({ filter: (page) => !/\/404\/?$/.test(page) }),
+    mdx(),
+    // zh pages are English fallbacks canonical to the en URL until translated.
+    sitemap({
+      filter: (page) =>
+        !/\/404\/?$/.test(page) && !new URL(page).pathname.startsWith('/zh/'),
+    }),
     flatZhNotFound,
   ],
   site: 'https://kazuha.me',
