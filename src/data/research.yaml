@@ -1,0 +1,5 @@
+- id: llm-behavior
+  title: LLM behavioral research
+  start: '2026-01'
+  with: Pengrui Han
+  summary: Sycophancy measurement and persona probing (HEXACO / Big Five) in Qwen2.5-7B, run on UCI OPENGPU. In progress.

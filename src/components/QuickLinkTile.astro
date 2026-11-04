@@ -1,0 +1,141 @@
+---
+import ExternalIcon from './ExternalIcon.astro';
+
+type IconName = 'grid' | 'doc' | 'book' | 'link';
+
+interface Props {
+  href: string;
+  title: string;
+  sub: string;
+  action: string;
+  icon: IconName;
+  external?: boolean;
+}
+
+const { href, title, sub, action, icon, external = false } = Astro.props;
+
+const icons: Record<IconName, string[]> = {
+  grid: [
+    'M4.5 3h4a1.5 1.5 0 0 1 1.5 1.5v4A1.5 1.5 0 0 1 8.5 10h-4A1.5 1.5 0 0 1 3 8.5v-4A1.5 1.5 0 0 1 4.5 3z',
+    'M15.5 3h4A1.5 1.5 0 0 1 21 4.5v4a1.5 1.5 0 0 1-1.5 1.5h-4A1.5 1.5 0 0 1 14 8.5v-4A1.5 1.5 0 0 1 15.5 3z',
+    'M4.5 14h4A1.5 1.5 0 0 1 10 15.5v4A1.5 1.5 0 0 1 8.5 21h-4A1.5 1.5 0 0 1 3 19.5v-4A1.5 1.5 0 0 1 4.5 14z',
+    'M15.5 14h4a1.5 1.5 0 0 1 1.5 1.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a1.5 1.5 0 0 1-1.5-1.5v-4a1.5 1.5 0 0 1 1.5-1.5z',
+  ],
+  doc: [
+    'M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z',
+    'M14 3v6h6M8 13h8M8 17h5',
+  ],
+  book: [
+    'M4 19.5V5a2 2 0 0 1 2-2h14v16H6.5A2.5 2.5 0 0 0 4 21.5z',
+    'M8 7h8M8 11h6',
+  ],
+  link: [
+    'M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7',
+    'M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7',
+  ],
+};
+---
+
+<a
+  class="tile"
+  href={href}
+  target={external ? '_blank' : undefined}
+  rel={external ? 'noopener' : undefined}
+>
+  <span class="icon">
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      focusable="false"
+    >
+      {icons[icon].map((d) => (
+        <path d={d} />
+      ))}
+    </svg>
+  </span>
+  <span class="text">
+    <span class="title">{title}</span>
+    <span class="sub">{sub}</span>
+  </span>
+  <span class="action">
+    {action}
+    {external && <ExternalIcon />}
+  </span>
+</a>
+
+<style>
+  .tile {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: 100%;
+    padding: 22px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-card);
+    transition:
+      border-color 0.15s ease,
+      transform 0.15s ease;
+  }
+  .tile:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+  .text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .title {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .sub {
+    font-size: 14px;
+    color: var(--text-3);
+  }
+  .action {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: auto;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  @media (max-width: 859.98px) {
+    .tile {
+      gap: 6px;
+      padding: 14px;
+    }
+    .sub {
+      display: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tile {
+      transition: none;
+    }
+    .tile:hover {
+      transform: none;
+    }
+  }
+</style>

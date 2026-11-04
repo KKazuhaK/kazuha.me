@@ -1,0 +1,15 @@
+- id: uci-ics32
+  order: 1
+  role: Learning Assistant
+  course: ICS 32
+  org: UC Irvine
+  term: Fall 2026
+- id: uci-ics31
+  order: 2
+  role: Learning Assistant
+  course: ICS 31
+  courseTitle: Intro to Programming (Python)
+  org: UC Irvine
+  term: Mar – Jun 2026
+  notes:
+    - Completed UNI STU 176, LA Pedagogy

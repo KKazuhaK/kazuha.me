@@ -1,0 +1,12 @@
+- id: languages
+  order: 1
+  label: Languages
+  items: [Go, Python, C++, JavaScript]
+- id: areas
+  order: 2
+  label: Areas
+  items:
+    - MCP & AI tooling
+    - self-hosted infrastructure
+    - networking
+    - identity management

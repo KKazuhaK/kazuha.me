@@ -1,0 +1,127 @@
+---
+import ProjectArt from './ProjectArt.astro';
+import type { LocalizedProject } from '../i18n/content';
+import {
+  fallbackLang,
+  getLocale,
+  localizedPath,
+  t,
+  type UiKey,
+} from '../i18n/ui';
+
+interface Props {
+  project: LocalizedProject;
+  /** Show the kind tag and year row (project list). */
+  showMeta?: boolean;
+  /** Heading level of the card title. */
+  headingLevel?: 2 | 3;
+}
+
+const { project, showMeta = false, headingLevel = 3 } = Astro.props;
+const Heading = `h${headingLevel}` as 'h2' | 'h3';
+const locale = getLocale(Astro.currentLocale);
+const { data } = project.entry;
+const href = localizedPath(locale, `/projects/${project.slug}`);
+const cta = t(locale, data.cta);
+// English fallback entries on a non-English page.
+const contentLang = project.fallback ? fallbackLang(locale) : undefined;
+---
+
+<article class="card">
+  <ProjectArt cover={data.cover} highlights={data.highlights} />
+  <div class="body">
+    {showMeta && (
+      <div class="meta">
+        <span class={`tag ${data.kind}`}>
+          {t(locale, `kind_${data.kind}` as UiKey)}
+        </span>
+        <span class="year">{data.year}</span>
+      </div>
+    )}
+    <Heading class="title" lang={contentLang}>
+      {data.title}
+    </Heading>
+    <p class="summary" lang={contentLang}>
+      {data.summary}
+    </p>
+    <a class="cta" {href}>
+      {cta}
+      <span class="visually-hidden" lang={contentLang}>
+        {t(locale, 'ctaAbout', { title: data.title })}
+      </span>{' '}
+      →
+    </a>
+  </div>
+</article>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+  }
+  .body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px 22px 22px;
+  }
+  .meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .tag {
+    padding: 2px 10px;
+    border-radius: var(--radius-pill);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .tag.oss {
+    background: var(--kind-oss-bg);
+    color: var(--kind-oss-fg);
+  }
+  .tag.research {
+    background: var(--kind-research-bg);
+    color: var(--kind-research-fg);
+  }
+  .tag.infra {
+    background: var(--kind-infra-bg);
+    color: var(--kind-infra-fg);
+  }
+  .year {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-3);
+  }
+  .title {
+    font-size: 28px;
+  }
+  .summary {
+    flex: 1;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--text-2);
+  }
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    min-height: var(--control-height);
+    padding: 0 16px;
+    margin-top: 6px;
+    border-radius: var(--radius-btn);
+    background: var(--text);
+    color: var(--surface);
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .cta:hover {
+    filter: brightness(1.15);
+  }
+</style>

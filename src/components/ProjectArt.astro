@@ -1,0 +1,172 @@
+---
+/*
+ * Placeholder illustrations for project cards, chosen by the project's
+ * `cover` field. They use their own colours (documented exception to the
+ * "tokens only" rule). Replace with real screenshots later.
+ */
+import { getLocale, t } from '../i18n/ui';
+
+interface Props {
+  cover?: string;
+  /** Lines shown in the "canvas" illustration (e.g. notable PR titles). */
+  highlights?: string[];
+}
+
+const { cover, highlights = [] } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+---
+
+<div class:list={['art', cover]} aria-hidden="true">
+  {cover === 'anteater' && (
+    <div class="terminal">
+      <span class="example">{t(locale, 'exampleLabel')}</span>
+      <div>
+        <span class="kw">tool</span> search_courses
+      </div>
+      <div class="dim">{'{ department: "COMPSCI", courseNumber: "161" }'}</div>
+      <div class="out">→ COMPSCI 161</div>
+    </div>
+  )}
+  {cover === 'canvas' && highlights.length > 0 && (
+    <ul class="prs">
+      {highlights.map((title) => (
+        <li>
+          <span class="badge">Merged</span>
+          <span class="pr-title">{title}</span>
+        </li>
+      ))}
+    </ul>
+  )}
+  {cover === 'research' && (
+    <svg width="120" height="114" viewBox="0 0 140 132" fill="none">
+      <polygon
+        points="70,8 126,40 126,96 70,124 14,96 14,40"
+        stroke="#f0c9ad"
+        stroke-width="1"
+      />
+      <polygon
+        points="70,20 112,50 96,92 70,110 30,82 46,48"
+        fill="#c2410c"
+        fill-opacity="0.18"
+        stroke="#c2410c"
+        stroke-width="1.5"
+      />
+    </svg>
+  )}
+  {cover === 'notes' && (
+    <svg width="96" height="116" viewBox="0 0 96 116" fill="none">
+      <rect
+        x="8"
+        y="4"
+        width="80"
+        height="108"
+        rx="8"
+        fill="#ffffff"
+        stroke="#b9dec7"
+        stroke-width="1.5"
+      />
+      <rect x="22" y="22" width="40" height="6" rx="3" fill="#1b6b41" />
+      <rect x="22" y="40" width="52" height="4" rx="2" fill="#b9dec7" />
+      <rect x="22" y="52" width="46" height="4" rx="2" fill="#b9dec7" />
+      <rect x="22" y="64" width="52" height="4" rx="2" fill="#b9dec7" />
+      <rect x="22" y="76" width="30" height="4" rx="2" fill="#b9dec7" />
+    </svg>
+  )}
+</div>
+
+<style>
+  .art {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 150px;
+    background: var(--surface-hover);
+    overflow: hidden;
+  }
+  .anteater {
+    display: block;
+    padding: 18px;
+    background: #11141b;
+  }
+  .terminal {
+    position: relative;
+    position: relative;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.75;
+    color: #aeb6c4;
+  }
+  .example {
+    position: absolute;
+    top: -6px;
+    right: 0;
+    padding: 0 8px;
+    border: 1px solid #3a4152;
+    border-radius: 999px;
+    font-size: 11px;
+    color: #8f99ab;
+  }
+  .example {
+    position: absolute;
+    top: -6px;
+    right: 0;
+    padding: 0 8px;
+    border: 1px solid #3a4152;
+    border-radius: 999px;
+    font-size: 11px;
+    color: #8f99ab;
+  }
+  .kw {
+    color: #7aa2ff;
+  }
+  .dim {
+    color: #6e7787;
+  }
+  .out {
+    margin-top: 8px;
+    color: #e6e9ef;
+  }
+  .canvas {
+    background: #eef1fb;
+  }
+  .prs {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    margin: 0;
+    padding: 0 16px;
+    list-style: none;
+  }
+  .prs li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: #ffffff;
+    border-radius: 8px;
+    font-size: 12px;
+    min-width: 0;
+  }
+  .badge {
+    flex: 0 0 auto;
+    padding: 1px 8px;
+    border-radius: 999px;
+    background: #8250df;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .pr-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #30343c;
+  }
+  .research {
+    background: #fff4ec;
+  }
+  .notes {
+    background: #e8f5ee;
+  }
+</style>

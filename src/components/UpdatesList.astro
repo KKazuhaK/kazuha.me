@@ -1,0 +1,86 @@
+---
+import ExternalIcon from './ExternalIcon.astro';
+import { isExternalUrl } from '../config/resolve';
+import { formatMonth } from '../i18n/format';
+import { fallbackLang, getLocale, localizedPath } from '../i18n/ui';
+
+interface Update {
+  /** YYYY-MM or YYYY-MM-DD. */
+  date: string;
+  text: string;
+  href?: string;
+}
+
+interface Props {
+  updates: Update[];
+}
+
+const { updates } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const textLang = fallbackLang(locale);
+
+function link(href: string) {
+  return localizedPath(locale, href);
+}
+---
+
+<ul>
+  {updates.map((update) => (
+    <li>
+      <time datetime={update.date}>{formatMonth(update.date, locale)}</time>
+      <span lang={textLang}>
+        {update.href ? (
+          isExternalUrl(update.href) ? (
+            <a href={update.href} target="_blank" rel="noopener">
+              {update.text}
+              <ExternalIcon size={13} />
+            </a>
+          ) : (
+            <a href={link(update.href)}>{update.text}</a>
+          )
+        ) : (
+          update.text
+        )}
+      </span>
+    </li>
+  ))}
+</ul>
+
+<style>
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+  }
+  li {
+    display: grid;
+    grid-template-columns: 110px minmax(0, 1fr);
+    gap: var(--space-2);
+    padding: var(--space-2) 20px;
+    font-size: 15px;
+  }
+  li + li {
+    border-top: 1px solid var(--border-soft);
+  }
+  time {
+    padding-top: 2px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-3);
+  }
+  a {
+    color: var(--accent);
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  @media (max-width: 859.98px) {
+    li {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+  }
+</style>

@@ -1,0 +1,131 @@
+---
+import { Font } from 'astro:assets';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { site } from '../config/site';
+import { seoLinks } from '../i18n/seo';
+import { getLocale, t } from '../i18n/ui';
+import '../styles/tokens.css';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** 404 page: no canonical/hreflang, noindex, language switch goes to home. */
+  notFound?: boolean;
+  /** True when a real translation of this page exists in every language. */
+  translated?: boolean;
+}
+
+const {
+  title,
+  description = site.tagline,
+  notFound = false,
+  translated = false,
+} = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const fullTitle = title ? `${title} · ${site.name}` : site.name;
+const { canonical, alternates } = seoLinks(
+  locale,
+  Astro.url.pathname,
+  translated,
+  Astro.site!,
+);
+const htmlLang = locale === 'zh' ? 'zh-Hans' : 'en';
+---
+
+<!doctype html>
+<html lang={htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {notFound && <meta name="robots" content="noindex" />}
+    {!notFound && <link rel="canonical" href={canonical} />}
+    {!notFound &&
+      alternates.map((alt) => (
+        <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+      ))}
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <meta name="generator" content={Astro.generator} />
+    <Font
+      cssVariable="--font-sans"
+      preload={[{ weight: 400, style: 'normal' }]}
+    />
+    <Font cssVariable="--font-serif" />
+    <Font cssVariable="--font-mono" />
+    <noscript>
+      <style is:inline>
+        @media (max-width: 859.98px) {
+          header .bar {
+            flex-wrap: wrap;
+          }
+          header [data-mobile-menu] {
+            display: contents !important;
+          }
+          header .toggle {
+            display: none !important;
+          }
+          header #mobile-menu {
+            display: flex;
+            position: static;
+            width: 100%;
+            padding-inline: 0;
+            box-shadow: none;
+            border-bottom: 0;
+          }
+        }
+      </style>
+    </noscript>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">
+      {t(locale, 'skipToContent')}
+    </a>
+    <Header notFound={notFound} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  main {
+    flex: 1;
+    width: 100%;
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: var(--space-5) var(--gutter);
+  }
+  @media (max-width: 859.98px) {
+    main {
+      padding-top: var(--space-2);
+    }
+  }
+  .skip-link {
+    position: absolute;
+    left: var(--space-1);
+    top: -100px;
+    z-index: 20;
+    padding: 10px 16px;
+    border-radius: var(--radius-btn);
+    background: var(--text);
+    color: var(--surface);
+    font-weight: 600;
+  }
+  .skip-link:focus {
+    top: var(--space-1);
+  }
+</style>

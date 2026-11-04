@@ -1,0 +1,194 @@
+---
+import { getCollection } from 'astro:content';
+import Breadcrumb from '../Breadcrumb.astro';
+import ExternalIcon from '../ExternalIcon.astro';
+import FallbackNotice from '../FallbackNotice.astro';
+import LinkButton from '../LinkButton.astro';
+import TimelineEntry from '../TimelineEntry.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { isPlaceholder, site } from '../../config/site';
+import { formatPeriod } from '../../i18n/format';
+import { fallbackLang, getLocale, t } from '../../i18n/ui';
+
+const locale = getLocale(Astro.currentLocale);
+const education = (await getCollection('education'))
+  .map((e) => e.data)
+  .sort((a, b) => b.start - a.start);
+const experience = (await getCollection('experience'))
+  .map((e) => e.data)
+  .sort((a, b) => b.start.localeCompare(a.start));
+const teaching = (await getCollection('teaching'))
+  .map((e) => e.data)
+  .sort((a, b) => a.order - b.order);
+const research = (await getCollection('research'))
+  .map((e) => e.data)
+  .sort((a, b) => b.start.localeCompare(a.start));
+const skills = (await getCollection('skills'))
+  .map((e) => e.data)
+  .sort((a, b) => a.order - b.order);
+
+const dl = fallbackLang(locale);
+const title = t(locale, 'cvHeading');
+const showUpdated = !isPlaceholder(site.cv.updated);
+const showPdf = !isPlaceholder(site.cv.pdf);
+---
+
+<BaseLayout {title}>
+  <div class="cv">
+    <header class="head">
+      <div>
+        <Breadcrumb items={[{ label: t(locale, 'nav_cv') }]} />
+        <h1>{title}</h1>
+        {showUpdated && (
+          <p class="updated">
+            {t(locale, 'lastUpdated')} {site.cv.updated}
+          </p>
+        )}
+      </div>
+      {showPdf && (
+        <LinkButton href={site.cv.pdf} variant="accent">
+          {t(locale, 'downloadPdf')}
+        </LinkButton>
+      )}
+    </header>
+
+    {locale !== 'en' && <FallbackNotice />}
+
+    <section>
+      <h2>{t(locale, 'cvEducation')}</h2>
+      {education.map((e) => (
+        <TimelineEntry
+          lang={dl}
+          period={`${e.start} – ${e.end}${e.expected ? t(locale, 'expectedSuffix') : ''}`}
+        >
+          <div class="primary">
+            <a href={e.url} target="_blank" rel="noopener">
+              {e.school}
+              <ExternalIcon size={13} />
+            </a>
+          </div>
+          <div class="secondary">
+            {[`${e.degree} ${e.field}`, e.division].filter(Boolean).join(' · ')}
+          </div>
+          {e.notes.map((note) => (
+            <div class="note">{note}</div>
+          ))}
+        </TimelineEntry>
+      ))}
+    </section>
+
+    <section>
+      <h2>{t(locale, 'cvExperience')}</h2>
+      {experience.map((e) => (
+        <TimelineEntry period={formatPeriod(e.start, e.end, locale)} lang={dl}>
+          <div class="primary">{e.title}</div>
+          <div class="secondary">
+            {e.org} · {e.location}
+            {e.mode && ` (${e.mode})`}
+          </div>
+          {e.summary && !isPlaceholder(e.summary) && (
+            <p class="note">{e.summary}</p>
+          )}
+        </TimelineEntry>
+      ))}
+    </section>
+
+    <section>
+      <h2>{t(locale, 'cvTeaching')}</h2>
+      {teaching.map((e) => (
+        <TimelineEntry period={e.term} lang={dl} periodLang={dl}>
+          <div class="primary">
+            {e.role} · {e.course}
+          </div>
+          <div class="secondary">
+            {e.org}
+            {e.courseTitle && ` · ${e.courseTitle}`}
+          </div>
+          {e.notes.map((note) => (
+            <div class="note">{note}</div>
+          ))}
+        </TimelineEntry>
+      ))}
+    </section>
+
+    <section>
+      <h2>{t(locale, 'cvResearch')}</h2>
+      {research.map((e) => (
+        <TimelineEntry period={formatPeriod(e.start, e.end, locale)}>
+          <div class="primary" lang={dl}>
+            {e.title}
+          </div>
+          <div class="secondary">
+            {e.with && t(locale, 'withPerson')}
+            <span lang={dl}>
+              {e.with && `${e.with} · `}
+              {e.summary}
+            </span>
+          </div>
+        </TimelineEntry>
+      ))}
+    </section>
+
+    <section>
+      <h2>{t(locale, 'cvSkills')}</h2>
+      {skills.map((e) => (
+        <TimelineEntry period={e.label} lang={dl} periodLang={dl}>
+          <div>{e.items.join(', ')}</div>
+        </TimelineEntry>
+      ))}
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .cv {
+    max-width: 880px;
+    margin: 0 auto;
+  }
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+  }
+  h1 {
+    margin-top: var(--space-1);
+    font-size: 48px;
+  }
+  .updated {
+    margin-top: var(--space-1);
+    font-size: 14px;
+    color: var(--text-3);
+  }
+  .cv :global(.notice) {
+    margin-bottom: var(--space-3);
+  }
+  section {
+    margin-top: var(--space-5);
+  }
+  h2 {
+    padding-bottom: var(--space-1);
+    border-bottom: 1px solid var(--border);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+  .primary a {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .primary a:hover {
+    color: var(--accent);
+  }
+  @media (max-width: 859.98px) {
+    h1 {
+      font-size: 38px;
+    }
+  }
+</style>

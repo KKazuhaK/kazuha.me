@@ -1,0 +1,47 @@
+---
+title: Anteater MCP
+summary: An MCP server that lets AI assistants search UCI courses, check prerequisites and plan schedules, built on ICSSC’s Anteater API.
+kind: oss
+year: 2026
+role: Author & maintainer
+stack: [JavaScript, Node.js, MCP, Docker]
+status: active
+featured: true
+order: 1
+cover: anteater
+links:
+  github: https://github.com/KKazuhaK/Anteater-MCP
+---
+
+## The problem
+
+[占位]
+
+## How it works
+
+<ArchDiagram
+  nodes={[
+    { title: 'AI assistant', sub: 'any MCP client' },
+    { title: 'Anteater MCP', sub: 'tools & formatting' },
+    { title: 'Anteater API', sub: 'by ICSSC' },
+  ]}
+  caption="The assistant calls tools; the server turns them into Anteater API requests."
+/>
+
+Anteater MCP wraps the Anteater API: the course catalogue, the live schedule of classes (WebSoc), grade distributions, enrollment history, prerequisite trees and degree requirements. It exposes 20 tools. Some of them:
+
+- `search_courses`: search the course catalogue
+- `check_prerequisites`: check whether you can take a course
+- `check_schedule`: check a set of sections for conflicts
+- `get_course_grades`: grade distribution for a course
+- `recommend_courses`: recommend courses matching constraints
+
+## Key decisions
+
+- [占位]
+- [占位]
+- [占位]
+
+## What I'd do differently
+
+- [占位]

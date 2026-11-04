@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LinkButton from '../LinkButton.astro';
+import { getLocale, localizedPath, t } from '../../i18n/ui';
+
+const locale = getLocale(Astro.currentLocale);
+const title = t(locale, 'notFoundTitle');
+---
+
+<BaseLayout title={title} notFound>
+  <h1>{title}</h1>
+  <p>{t(locale, 'notFoundBody')}</p>
+  <div class="actions">
+    <LinkButton href={localizedPath(locale, '/')}>
+      {t(locale, 'backHome')}
+    </LinkButton>
+  </div>
+</BaseLayout>
+
+<style>
+  h1 {
+    margin-bottom: var(--space-2);
+    font-size: 48px;
+  }
+  p {
+    color: var(--text-2);
+  }
+  .actions {
+    margin-top: var(--space-3);
+  }
+  @media (max-width: 859.98px) {
+    h1 {
+      font-size: 38px;
+    }
+  }
+</style>

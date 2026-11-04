@@ -1,0 +1,86 @@
+---
+interface Node {
+  title: string;
+  sub?: string;
+}
+
+interface Props {
+  nodes: Node[];
+  caption?: string;
+}
+
+const { nodes, caption } = Astro.props;
+const middle = Math.floor((nodes.length - 1) / 2);
+---
+
+<figure>
+  <div class="row">
+    {nodes.map((node, index) => (
+      <>
+        {index > 0 && (
+          <span class="arrow" aria-hidden="true">
+            →
+          </span>
+        )}
+        <div class:list={['node', { hot: index === middle }]}>
+          <div class="title">{node.title}</div>
+          {node.sub && <div class="sub">{node.sub}</div>}
+        </div>
+      </>
+    ))}
+  </div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  figure {
+    margin: var(--space-2) 0;
+  }
+  .row {
+    display: flex;
+    align-items: stretch;
+    gap: var(--space-1);
+  }
+  .node {
+    flex: 1;
+    padding: var(--space-2);
+    text-align: center;
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-btn);
+  }
+  .node.hot {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .title {
+    font-weight: 600;
+  }
+  .sub {
+    margin-top: 2px;
+    font-size: 13px;
+    color: var(--text-3);
+  }
+  .hot .sub {
+    color: inherit;
+  }
+  .arrow {
+    align-self: center;
+    font-size: 20px;
+    color: var(--text-3);
+  }
+  figcaption {
+    margin-top: var(--space-1);
+    font-size: 14px;
+    color: var(--text-3);
+  }
+  @media (max-width: 859.98px) {
+    .row {
+      flex-direction: column;
+    }
+    .arrow {
+      transform: rotate(90deg);
+    }
+  }
+</style>

@@ -1,0 +1,52 @@
+---
+import { site, isPlaceholder } from '../config/site';
+import { getLocale, t } from '../i18n/ui';
+
+const locale = getLocale(Astro.currentLocale);
+const hasPhoto = !isPlaceholder(site.avatar);
+const initials = site.name
+  .split(/\s+/)
+  .map((word) => word[0])
+  .join('')
+  .toUpperCase();
+---
+
+{hasPhoto ? (
+  <img
+    class="avatar"
+    src={site.avatar}
+    width={112}
+    height={112}
+    alt={t(locale, 'avatarAlt', { name: site.name })}
+  />
+) : (
+  <span class="avatar placeholder" aria-hidden="true">
+    {initials}
+  </span>
+)}
+
+<style>
+  .avatar {
+    --size: 112px;
+    flex: 0 0 auto;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--border);
+    border: 1px solid var(--border-strong);
+    color: var(--text-3);
+    font-family: var(--font-mono);
+    font-size: calc(var(--size) * 0.25);
+  }
+  @media (max-width: 859.98px) {
+    .avatar {
+      --size: 72px;
+    }
+  }
+</style>
