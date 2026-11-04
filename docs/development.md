@@ -7,18 +7,25 @@
 
 ## 常用命令
 
-| 命令                 | 作用                                                                              |
-| -------------------- | --------------------------------------------------------------------------------- |
-| `npm install`        | 安装依赖                                                                          |
-| `npm run dev`        | 本地开发服务器（`astro dev --background` 可在后台运行，用 `astro dev stop` 停止） |
-| `npm run build`      | 构建到 `dist/`                                                                    |
-| `npm run check`      | `astro check` 类型检查                                                            |
-| `npm run lint`       | ESLint                                                                            |
-| `npm run format`     | Prettier 格式化                                                                   |
-| `npm run preview:cf` | 构建后用 `wrangler dev` 按线上方式预览                                            |
-| `npm run deploy`     | 构建并 `wrangler deploy`                                                          |
+| 命令                   | 作用                                                                              |
+| ---------------------- | --------------------------------------------------------------------------------- |
+| `npm install`          | 安装依赖                                                                          |
+| `npm run dev`          | 本地开发服务器（`astro dev --background` 可在后台运行，用 `astro dev stop` 停止） |
+| `npm run build`        | 构建到 `dist/`                                                                    |
+| `npm run check`        | `astro check` 类型检查                                                            |
+| `npm run lint`         | ESLint                                                                            |
+| `npm run format`       | Prettier 格式化                                                                   |
+| `npm run format:check` | 只检查格式，不改文件（CI 用）                                                     |
+| `npm run preview:cf`   | 构建后用 `wrangler dev` 按线上方式预览                                            |
+| `npm run deploy`       | 构建并 `wrangler deploy`（手动部署；平时由 Workers Builds 自动部署）              |
 
-提交前至少跑一遍 `npm run check && npm run lint && npm run build`。
+提交前至少跑一遍 `npm run check && npm run lint && npm run format:check && npm run build`。
+
+## CI 与部署流程
+
+- **GitHub Actions**（`.github/workflows/ci.yml`）：每个 PR 和每次推送到 `main` 都跑 `npm ci` → `check` → `lint` → `format:check` → `build`。它只做检查，不部署，也不需要任何密钥。
+- **Cloudflare Workers Builds**：连接 GitHub 仓库后由 Cloudflare 拉取代码自己构建。推送到 `main` 时部署生产环境；其他分支生成预览链接。
+- 两者互不依赖，Cloudflare 不等 CI 结果。`main` 目前没有分支保护，顺序靠手动遵守：PR 的 CI 通过后再合并，合并后 Cloudflare 才会部署。
 
 ## 目录结构
 
