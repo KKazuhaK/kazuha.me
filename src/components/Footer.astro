@@ -1,0 +1,60 @@
+---
+import ExternalIcon from './ExternalIcon.astro';
+import { site, isPlaceholder } from '../config/site';
+import { getLocale, localizedPath, t } from '../i18n/ui';
+
+const locale = getLocale(Astro.currentLocale);
+const year = new Date().getFullYear();
+const showEmail = !isPlaceholder(site.email);
+---
+
+<footer>
+  <div class="inner">
+    <span>
+      © {year} {site.name}
+    </span>
+    <span class="links">
+      {showEmail && (
+        <>
+          <a href={`mailto:${site.email}`}>{t(locale, 'email')}</a>
+          {' · '}
+        </>
+      )}
+      <a href={site.social.github} target="_blank" rel="noopener">
+        {t(locale, 'github')}
+        <ExternalIcon size={12} />
+      </a>
+      {' · '}
+      <a href={localizedPath(locale, '/links')}>{t(locale, 'allLinks')}</a>
+    </span>
+  </div>
+</footer>
+
+<style>
+  footer {
+    border-top: 1px solid var(--border);
+    color: var(--text-3);
+    font-size: 14px;
+  }
+  .inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0 var(--space-2);
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: var(--space-3) var(--gutter);
+  }
+  .links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-height: var(--control-height);
+    padding: 0 4px;
+    color: var(--text-2);
+  }
+  .links a:hover {
+    color: var(--accent);
+  }
+</style>

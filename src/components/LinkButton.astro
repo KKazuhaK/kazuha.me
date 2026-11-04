@@ -1,0 +1,81 @@
+---
+import ExternalIcon from './ExternalIcon.astro';
+
+interface Props {
+  href: string;
+  variant?: 'primary' | 'accent' | 'secondary';
+  size?: 'md' | 'lg';
+  class?: string;
+}
+
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  class: className,
+} = Astro.props;
+
+function isExternal(url: string): boolean {
+  if (!/^https?:\/\//i.test(url)) return false;
+  try {
+    return new URL(url).host !== Astro.site?.host;
+  } catch {
+    return false;
+  }
+}
+const external = isExternal(href);
+---
+
+<a
+  href={href}
+  target={external ? '_blank' : undefined}
+  rel={external ? 'noopener' : undefined}
+  class:list={['btn', variant, size, className]}
+>
+  <slot />
+  {external && (
+    <>
+      <ExternalIcon />
+    </>
+  )}
+</a>
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: var(--control-height);
+    padding: 0 20px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-btn);
+    font-size: 15px;
+    font-weight: 600;
+    transition: background 0.15s ease;
+  }
+  .lg {
+    min-height: var(--control-height-lg);
+    font-size: 16px;
+  }
+  .primary {
+    background: var(--text);
+    color: var(--surface);
+  }
+  .accent {
+    background: var(--accent);
+    color: var(--surface);
+  }
+  .secondary {
+    background: var(--surface);
+    color: var(--text);
+    border-color: var(--border-strong);
+  }
+  .secondary:hover {
+    background: var(--surface-hover);
+  }
+  .primary:hover,
+  .accent:hover {
+    filter: brightness(1.15);
+  }
+</style>

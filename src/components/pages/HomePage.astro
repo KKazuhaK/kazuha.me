@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../config/site';
+import { getLocale, t } from '../../i18n/ui';
+
+const locale = getLocale(Astro.currentLocale);
+---
+
+<BaseLayout>
+  <h1>{site.name}</h1>
+  <p class="tagline">{site.tagline}</p>
+  <p class="now">
+    <span class="dot" aria-hidden="true"></span>
+    <span class="label">{t(locale, 'now')}</span>
+    {' · '}
+    {site.now.label} · {site.now.org}
+  </p>
+</BaseLayout>
+
+<style>
+  h1 {
+    font-size: 60px;
+  }
+  .tagline {
+    margin-top: var(--space-1);
+    font-size: 18px;
+    color: var(--text-2);
+  }
+  .now {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin-top: var(--space-3);
+    padding: 6px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    background: var(--surface);
+    font-size: 14px;
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--success);
+  }
+  .label {
+    font-weight: 600;
+  }
+  @media (max-width: 859.98px) {
+    h1 {
+      font-size: 38px;
+    }
+  }
+</style>

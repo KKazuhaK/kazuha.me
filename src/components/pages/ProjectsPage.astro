@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getLocale, t } from '../../i18n/ui';
+
+const locale = getLocale(Astro.currentLocale);
+const title = t(locale, 'projectsTitle');
+---
+
+<BaseLayout title={title}>
+  <h1>{title}</h1>
+  <p>{t(locale, 'comingSoon')}</p>
+</BaseLayout>
+
+<style>
+  h1 {
+    margin-bottom: var(--space-2);
+    font-size: 48px;
+  }
+  p {
+    color: var(--text-2);
+  }
+  @media (max-width: 859.98px) {
+    h1 {
+      font-size: 38px;
+    }
+  }
+</style>

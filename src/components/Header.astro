@@ -1,0 +1,98 @@
+---
+import ExternalIcon from './ExternalIcon.astro';
+import LangSwitch from './LangSwitch.astro';
+import MobileMenu from './MobileMenu.astro';
+import { resolveNav } from '../config/nav';
+import { site } from '../config/site';
+import { getLocale, localizedPath, t } from '../i18n/ui';
+
+interface Props {
+  notFound?: boolean;
+}
+const { notFound = false } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const items = resolveNav(locale, Astro.url.pathname);
+---
+
+<header>
+  <div class="bar">
+    <a class="brand" href={localizedPath(locale, '/')}>
+      {site.name}
+    </a>
+    <nav class="desktop" aria-label={t(locale, 'navLabel')}>
+      {items.map((item) => (
+        <a
+          href={item.href}
+          target={item.external ? '_blank' : undefined}
+          rel={item.external ? 'noopener' : undefined}
+          class:list={{ active: item.active }}
+          aria-current={item.active ? 'page' : undefined}
+        >
+          {item.label}
+          {item.external && (
+            <>
+              <ExternalIcon />
+            </>
+          )}
+        </a>
+      ))}
+    </nav>
+    <LangSwitch class="desktop" notFound={notFound} />
+    <MobileMenu items={items} notFound={notFound} />
+  </div>
+</header>
+
+<style>
+  header {
+    position: relative;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: 10px var(--gutter);
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--control-height);
+    font-size: 18px;
+    font-weight: 600;
+  }
+  nav.desktop {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-left: auto;
+    font-size: 15px;
+  }
+  nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-height: var(--control-height);
+    padding: 0 14px;
+    border-radius: var(--radius-btn);
+    color: var(--text-2);
+    transition: background 0.15s ease;
+  }
+  nav a:hover {
+    background: var(--surface-hover);
+  }
+  nav a.active {
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 600;
+  }
+  @media (max-width: 859.98px) {
+    nav.desktop,
+    :global(.lang.desktop) {
+      display: none !important;
+    }
+  }
+</style>
