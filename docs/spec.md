@@ -207,6 +207,7 @@ kazuha.me 是 Kazuha Mo 的个人主页与作品集：多页面、内容驱动�
 - 纯静态构建，Wrangler 部署到 Cloudflare Workers 静态资源，绑定 kazuha.me。
 - DNS 在 M1 迁到 Cloudflare，M2 结束时绑定域名（nameserver 生效需要时间，提前做）。
 - `wrangler.jsonc`：`assets.directory: "./dist"`、`assets.not_found_handling: "404-page"`；`html_handling` 用默认的 `auto-trailing-slash`，与 Astro 默认的 `build.format: "directory"` 一致。
+- 缓存：`public/_headers` 给 `/_astro/*`（文件名带内容 hash 的 CSS、JS、字体）设 `Cache-Control: public, max-age=604800, immutable`（7 天；规则也会作用于 404，所以不设一年）；HTML 保持 Cloudflare 默认的每次重新验证，发布后立即生效。字体文件名按 Fontsource 带版本号的地址计算，改用 `@latest` 一类不带版本的字体来源前要先改掉这条规则。
 - CI：GitHub Actions 在 PR 和 `main` 上跑类型检查、lint、格式检查和构建，只检查不部署（见 [`development.md`](development.md#ci-与部署流程)）。
 - 部署：Workers Builds 连接 GitHub，由 Cloudflare 拉取代码构建。构建命令 `npm run build`，部署命令 `npx wrangler deploy`；在设置里打开非生产分支的预览构建（默认 `npx wrangler preview`），PR 会收到预览链接。
 - SEO：`@astrojs/sitemap`、canonical、Open Graph 图（M3 可自动生成）、`robots.txt`。

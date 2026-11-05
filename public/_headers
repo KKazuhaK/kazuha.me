@@ -1,0 +1,4 @@
+# CSS names carry a content hash; font names hash their versioned Fontsource URL.
+# Kept to 7 days, not a year: this rule also matches 404s, so a missing file is not cached long.
+/_astro/*
+  Cache-Control: public, max-age=604800, immutable
