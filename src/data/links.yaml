@@ -10,8 +10,8 @@
   order: 2
   group: sites
   name: Course Notes
-  sub: My study notes, on my UCI web space
-  url: notes
+  sub: My course notes, grouped by school
+  url: /notes
   mark: N
   cta: Open
 - id: notes-mirror

@@ -8,9 +8,6 @@ export function resolveUrl(url: string | undefined): string | null {
   if (!url) return null;
   let resolved: string;
   switch (url) {
-    case 'notes':
-      resolved = site.notesUrl;
-      break;
     case 'github':
       resolved = site.social.github;
       break;

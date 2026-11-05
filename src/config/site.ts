@@ -17,8 +17,6 @@ export interface NavItem {
 /** Marker for values the owner has not provided yet. */
 export const PLACEHOLDER = '[占位]';
 
-const notesUrl = 'https://ics.uci.edu/~kazuhak/';
-
 const nav: NavItem[] = [
   { key: 'home', labelKey: 'nav_home', href: '/', enabled: true },
   {
@@ -34,9 +32,8 @@ const nav: NavItem[] = [
     key: 'notes',
     labelKey: 'nav_notes',
     mobileLabelKey: 'courseNotes',
-    href: notesUrl,
+    href: '/notes',
     enabled: true,
-    external: true,
   },
 ];
 
@@ -55,7 +52,6 @@ export const site = {
     github: 'https://github.com/KKazuhaK',
     linkedin: PLACEHOLDER,
   },
-  notesUrl,
   nav,
 };
 

@@ -6,7 +6,14 @@ import LinkGroup from '../LinkGroup.astro';
 import LinkRow from '../LinkRow.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { displayUrl, isExternalUrl, resolveUrl } from '../../config/resolve';
-import { fallbackLang, getLocale, t, type UiKey } from '../../i18n/ui';
+import { site } from '../../config/site';
+import {
+  fallbackLang,
+  getLocale,
+  localizedPath,
+  t,
+  type UiKey,
+} from '../../i18n/ui';
 
 const locale = getLocale(Astro.currentLocale);
 const groups = ['school', 'sites', 'code', 'contact'] as const;
@@ -17,8 +24,14 @@ const rows = (await getCollection('links'))
   .filter((item) => item.enabled)
   .sort((a, b) => a.order - b.order)
   .flatMap((item) => {
-    const href = resolveUrl(item.url);
-    return href ? [{ ...item, href }] : [];
+    const resolved = resolveUrl(item.url);
+    if (!resolved) return [];
+    // Site paths such as /notes stay on this site, in the current language.
+    const internal = resolved.startsWith('/');
+    const href = internal ? localizedPath(locale, resolved) : resolved;
+    const display =
+      item.display ?? displayUrl(internal ? site.url + resolved : resolved);
+    return [{ ...item, href, display }];
   });
 
 const title = t(locale, 'linksTitle');
@@ -43,7 +56,7 @@ const intro = t(locale, 'linksIntro');
                 href={item.href}
                 name={item.name}
                 sub={item.sub}
-                display={item.display ?? displayUrl(item.href)}
+                display={item.display}
                 mark={item.mark}
                 cta={item.cta}
                 group={item.group}

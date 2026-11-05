@@ -20,7 +20,6 @@ const updates = (await getCollection('updates'))
   .sort((a, b) => b.date.localeCompare(a.date))
   .slice(0, 4);
 const textLang = fallbackLang(locale);
-const notesHost = new URL(site.notesUrl).host;
 ---
 
 <BaseLayout description={site.intro}>
@@ -65,12 +64,11 @@ const notesHost = new URL(site.notesUrl).host;
           icon="doc"
         />
         <QuickLinkTile
-          href={site.notesUrl}
+          href={localizedPath(locale, '/notes')}
           title={t(locale, 'courseNotes')}
-          sub={t(locale, 'tileNotesSub', { host: notesHost })}
+          sub={t(locale, 'tileNotesSub')}
           action={t(locale, 'tileNotesAction')}
           icon="book"
-          external
         />
         <QuickLinkTile
           href={localizedPath(locale, '/links')}

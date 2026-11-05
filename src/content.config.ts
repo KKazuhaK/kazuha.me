@@ -28,8 +28,7 @@ const projects = defineCollection({
     links: z
       .object({
         github: z.url().optional(),
-        /** A URL, or the sentinel `notes` (resolved to site.notesUrl). */
-        demo: z.string().optional(),
+        demo: z.url().optional(),
         paper: z.url().optional(),
       })
       .default({}),
@@ -122,7 +121,7 @@ const links = defineCollection({
     group: z.enum(['school', 'sites', 'code', 'contact']),
     name: z.string(),
     sub: z.string(),
-    /** A URL, or a sentinel: notes | github | linkedin | email. */
+    /** A URL, a site path such as /notes, or a sentinel: github | linkedin | email. */
     url: z.string(),
     /** Text shown for the address; derived from the URL when omitted. */
     display: z.string().optional(),
@@ -130,6 +129,20 @@ const links = defineCollection({
     cta: z.string(),
     /** Set to false to hide a row without deleting it. */
     enabled: z.boolean().default(true),
+  }),
+});
+
+const notes = defineCollection({
+  loader: file('src/data/notes.yaml'),
+  schema: z.object({
+    id: z.string(),
+    order: z.number(),
+    school: z.string(),
+    name: z.string(),
+    sub: z.string(),
+    url: z.url(),
+    mark: z.string(),
+    cta: z.string(),
   }),
 });
 
@@ -142,4 +155,5 @@ export const collections = {
   research,
   skills,
   links,
+  notes,
 };
