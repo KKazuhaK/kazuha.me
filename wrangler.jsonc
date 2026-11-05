@@ -1,6 +1,9 @@
 {
   "name": "kazuha-me",
   "compatibility_date": "2026-11-04",
+  // Keep these explicit so deploys never toggle them.
+  "workers_dev": true,
+  "preview_urls": false,
   "assets": {
     "directory": "./dist",
     "not_found_handling": "404-page",
