@@ -87,8 +87,7 @@ const en = {
   cvResearch: 'Research',
   cvSkills: 'Skills',
   withPerson: 'With ',
-  linksIntro:
-    'Everything I run or belong to, in one place. Each button opens the other site.',
+  linksIntro: 'Everything I run or belong to, in one place.',
   notesTitle: 'Course notes',
   notesIntro:
     'Study notes from each school I’ve attended. Each button opens that school’s notes site.',
@@ -183,7 +182,7 @@ const zh: Record<UiKey, string> = {
   cvResearch: '研究',
   cvSkills: '技能',
   withPerson: '合作者：',
-  linksIntro: '我运营或所属的一切，都放在这里。每个按钮都会打开对应的站点。',
+  linksIntro: '我运营或所属的一切，都放在这里。',
   notesTitle: '课程笔记',
   notesIntro: '我在每所学校的学习笔记。每个按钮都会打开对应学校的笔记站。',
   group_school: '学校',
