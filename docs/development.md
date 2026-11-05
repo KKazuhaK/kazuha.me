@@ -67,6 +67,7 @@ docs/           规格、约定、决策记录
 - 交互用原生 HTML + 少量内联脚本，脚本失效时内容仍然可用（见 [ADR 0001](decisions/0001-no-ui-framework.md)）。
 - 外链用 `LinkButton`，或配合 `ExternalIcon` 手写：必须同时有 `target="_blank"`、`rel="noopener"` 和 `ExternalIcon`（↗ 图标 + "在新标签页打开"的隐藏文字）。
 - 站内链接用 `getRelativeLocaleUrl()` 生成，不手写 `/zh/` 前缀。
+- 图标从 `@lucide/astro` 引入；箭头用 `Arrow`（`dir="left"` 向左），外链用 `ExternalIcon`。界面文字里不写 → ← ↗ 字符。
 - Astro 7 默认按 JSX 规则压缩 HTML，相邻行内元素之间的空格会被去掉；需要空格时显式写 `{" "}`。
 
 ## 决策记录

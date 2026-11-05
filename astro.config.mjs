@@ -44,9 +44,9 @@ export default defineConfig({
   fonts: [
     {
       provider: fontProviders.fontsource(),
-      name: 'Instrument Serif',
+      name: 'Newsreader',
       cssVariable: '--font-serif',
-      weights: [400],
+      weights: [500],
       styles: ['normal'],
       subsets: ['latin'],
       fallbacks: ['Songti SC', 'Noto Serif SC', 'Georgia', 'serif'],
