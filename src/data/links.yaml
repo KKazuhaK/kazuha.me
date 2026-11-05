@@ -14,8 +14,16 @@
   url: /notes
   mark: N
   cta: Open
-- id: notes-mirror
+- id: uci-site
   order: 3
+  group: sites
+  name: My UCI site
+  sub: Course notes, small web tools and experiments
+  url: https://uci.kazuha.me/
+  mark: U
+  cta: Visit
+- id: notes-mirror
+  order: 4
   group: sites
   name: Course Notes (mirror)
   sub: Same notes, if the UCI server is slow
@@ -24,7 +32,7 @@
   cta: Open
   enabled: false
 - id: github
-  order: 4
+  order: 5
   group: code
   name: GitHub
   sub: All my open-source work
@@ -32,7 +40,7 @@
   mark: GH
   cta: Visit
 - id: anteater-mcp
-  order: 5
+  order: 6
   group: code
   name: Anteater MCP
   sub: Source code for my course-planning MCP server
@@ -40,7 +48,7 @@
   mark: A
   cta: Visit
 - id: email
-  order: 6
+  order: 7
   group: contact
   name: Email
   sub: The best way to reach me
@@ -48,7 +56,7 @@
   mark: '@'
   cta: Email me
 - id: linkedin
-  order: 7
+  order: 8
   group: contact
   name: LinkedIn
   sub: Professional profile

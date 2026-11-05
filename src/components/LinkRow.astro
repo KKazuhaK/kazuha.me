@@ -1,4 +1,5 @@
 ---
+import Arrow from './Arrow.astro';
 import ExternalIcon from './ExternalIcon.astro';
 
 interface Props {
@@ -38,7 +39,7 @@ const { href, name, sub, display, mark, cta, group, external, lang } =
   </span>
   <span class="cta">
     <span {lang}>{cta}</span>
-    {external && <ExternalIcon size={13} />}
+    {external ? <ExternalIcon size={13} /> : <Arrow size={14} />}
   </span>
 </a>
 

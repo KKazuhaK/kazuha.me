@@ -4,12 +4,12 @@
 
 ## 决定
 
-用 Astro Fonts API（`fontProviders.fontsource()`）在构建时下载 Instrument Serif、IBM Plex Sans、IBM Plex Mono，和站点一起部署。不链接 Google Fonts。
+用 Astro Fonts API（`fontProviders.fontsource()`）在构建时下载 Newsreader、IBM Plex Sans、IBM Plex Mono，和站点一起部署。不链接 Google Fonts。
 
 中文不加载 web font，回退到系统字体：
 
 - 正文：PingFang SC → Noto Sans SC
-- 标题：Songti SC → Noto Serif SC（Instrument Serif 只有拉丁字符集）
+- 标题：Songti SC → Noto Serif SC（只加载了 Newsreader 的拉丁字符集）
 
 ## 理由
 

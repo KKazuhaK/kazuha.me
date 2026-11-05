@@ -1,4 +1,5 @@
 ---
+import Arrow from './Arrow.astro';
 import ProjectArt from './ProjectArt.astro';
 import type { LocalizedProject } from '../i18n/content';
 import {
@@ -48,8 +49,8 @@ const contentLang = project.fallback ? fallbackLang(locale) : undefined;
       {cta}
       <span class="visually-hidden" lang={contentLang}>
         {t(locale, 'ctaAbout', { title: data.title })}
-      </span>{' '}
-      →
+      </span>
+      <Arrow />
     </a>
   </div>
 </article>
@@ -111,6 +112,7 @@ const contentLang = project.fallback ? fallbackLang(locale) : undefined;
   .cta {
     display: inline-flex;
     align-items: center;
+    gap: 6px;
     align-self: flex-start;
     min-height: var(--control-height);
     padding: 0 16px;

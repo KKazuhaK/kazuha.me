@@ -44,7 +44,12 @@ const items = resolveNav(locale, Astro.url.pathname);
 
 <style>
   header {
+    /* Stays put while the page below it fades between routes. */
+    view-transition-name: site-header;
     position: relative;
+    /* The transition name makes the header a stacking context; keep it (and the
+       mobile menu inside it) above positioned page content. */
+    z-index: 11;
     background: var(--surface);
     border-bottom: 1px solid var(--border);
   }

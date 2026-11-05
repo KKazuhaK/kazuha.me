@@ -1,4 +1,5 @@
 ---
+import Arrow from '../Arrow.astro';
 import { render } from 'astro:content';
 import ArchDiagram from '../ArchDiagram.astro';
 import Breadcrumb from '../Breadcrumb.astro';
@@ -67,6 +68,7 @@ function projectHref(s: string) {
         </LinkButton>
       )}
       <LinkButton href={listHref} variant="secondary">
+        <Arrow dir="left" />
         {t(locale, 'backToProjects')}
       </LinkButton>
     </div>
@@ -80,7 +82,10 @@ function projectHref(s: string) {
     <nav class="pager" aria-label={t(locale, 'moreProjects')}>
       {previous && (
         <a class="prev" href={projectHref(previous.slug)}>
-          <span class="dir">{t(locale, 'previousProject')}</span>
+          <span class="dir">
+            <Arrow dir="left" size={15} />
+            {t(locale, 'previousProject')}
+          </span>
           <span
             class="name"
             lang={previous.fallback ? fallbackLang(locale) : undefined}
@@ -91,7 +96,10 @@ function projectHref(s: string) {
       )}
       {next && (
         <a class="next" href={projectHref(next.slug)}>
-          <span class="dir">{t(locale, 'nextProject')}</span>
+          <span class="dir">
+            {t(locale, 'nextProject')}
+            <Arrow size={15} />
+          </span>
           <span
             class="name"
             lang={next.fallback ? fallbackLang(locale) : undefined}
@@ -150,9 +158,13 @@ function projectHref(s: string) {
   }
   .next {
     grid-column: 2;
+    align-items: flex-end;
     text-align: right;
   }
   .dir {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     font-size: 14px;
     color: var(--accent);
     font-weight: 600;

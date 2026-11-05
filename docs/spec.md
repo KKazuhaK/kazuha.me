@@ -82,26 +82,26 @@ kazuha.me 是 Kazuha Mo 的个人主页与作品集：多页面、内容驱动�
 
 所有页面套 `BaseLayout`，顶栏和页脚只存在一份。
 
-| 组件                    | 用在               | 职责                                                                                    |
-| ----------------------- | ------------------ | --------------------------------------------------------------------------------------- |
-| `BaseLayout`            | 所有页面           | `<head>`（viewport、SEO、OG、字体）、Header、Footer                                     |
-| `Header`                | 所有页面           | 读 `site.nav` 渲染桌面导航和手机菜单，按当前路由高亮                                    |
-| `MobileMenu`            | Header             | "Menu / Close" 按钮 + 整列大按钮 + 语言切换 + Contact；`aria-expanded`                  |
-| `LangSwitch`            | Header、MobileMenu | 一个不起眼的文字链接，指向另一种语言的同一页面（英文页显示“中文”，中文页显示“English”） |
-| `Footer`                | 所有页面           | 版权、Email / GitHub / All links                                                        |
-| `LinkButton`            | 全站               | 实心 / 描边 / 次要三种；外链自动加 ↗；最小高度 44px                                     |
-| `QuickLinkTile`         | 首页               | 图标 + 标题 + 副标题 + 动作文字                                                         |
-| `NowBadge`              | 首页               | 读 `site.now`                                                                           |
-| `ProjectCard`           | 首页、/projects    | 封面或示意图、标签、简介、跳转按钮                                                      |
-| `ProjectFilter`         | /projects          | 类别按钮，`aria-pressed`；无脚本时显示全部                                              |
-| `ProjectMeta`           | 项目详情           | Role / Year / Stack                                                                     |
-| `ArchDiagram`           | 项目详情、MDX      | 方框 + 箭头 SVG，手机纵向                                                               |
-| `Breadcrumb`            | 子页面             | Home / Projects / …                                                                     |
-| `PostCard` / `PostList` | 首页、/blog        | 标题、日期、标签、摘要                                                                  |
-| `TimelineEntry`         | /cv                | 左时间右内容，手机上下排列                                                              |
-| `UpdatesList`           | 首页               | 最近动态                                                                                |
-| `LinkRow` / `LinkGroup` | /links、/notes     | 图标、名称、说明、网址、"Visit ↗"                                                       |
-| `Prose`                 | 文章、项目详情     | MDX 正文排版                                                                            |
+| 组件                    | 用在               | 职责                                                                                               |
+| ----------------------- | ------------------ | -------------------------------------------------------------------------------------------------- |
+| `BaseLayout`            | 所有页面           | `<head>`（viewport、SEO、OG、字体）、Header、Footer                                                |
+| `Header`                | 所有页面           | 读 `site.nav` 渲染桌面导航和手机菜单，按当前路由高亮                                               |
+| `MobileMenu`            | Header             | "Menu / Close" 按钮 + 整列大按钮 + 语言切换 + Contact；`aria-expanded`                             |
+| `LangSwitch`            | Header、MobileMenu | 地球仪图标 + 语言名的小描边胶囊，指向另一种语言的同一页面（英文页显示“中文”，中文页显示“English”） |
+| `Footer`                | 所有页面           | 版权、Email / GitHub / All links                                                                   |
+| `LinkButton`            | 全站               | 实心 / 描边 / 次要三种；外链自动加 ↗；最小高度 44px                                                |
+| `QuickLinkTile`         | 首页               | 图标 + 标题 + 副标题 + 动作文字                                                                    |
+| `NowBadge`              | 首页               | 读 `site.now`                                                                                      |
+| `ProjectCard`           | 首页、/projects    | 封面或示意图、标签、简介、跳转按钮                                                                 |
+| `ProjectFilter`         | /projects          | 类别按钮，`aria-pressed`；无脚本时显示全部                                                         |
+| `ProjectMeta`           | 项目详情           | Role / Year / Stack                                                                                |
+| `ArchDiagram`           | 项目详情、MDX      | 方框 + 箭头 SVG，手机纵向                                                                          |
+| `Breadcrumb`            | 子页面             | Home / Projects / …                                                                                |
+| `PostCard` / `PostList` | 首页、/blog        | 标题、日期、标签、摘要                                                                             |
+| `TimelineEntry`         | /cv                | 左时间右内容，手机上下排列                                                                         |
+| `UpdatesList`           | 首页               | 最近动态                                                                                           |
+| `LinkRow` / `LinkGroup` | /links、/notes     | 图标、名称、说明、网址、"Visit ↗"                                                                  |
+| `Prose`                 | 文章、项目详情     | MDX 正文排版                                                                                       |
 
 ## 设计规范
 
@@ -118,7 +118,7 @@ kazuha.me 是 Kazuha Mo 的个人主页与作品集：多页面、内容驱动�
 | `--text-3`        | `#5a5f6b`                          | 标签、日期                             |
 | `--accent`        | `#2448c9`                          | 链接、当前导航、强调按钮               |
 | `--accent-soft`   | `#eef1fb`                          | 当前导航底色、图标底色                 |
-| 标题字体          | Instrument Serif 400               | h1 60px（手机 38px），卡片标题 26–30px |
+| 标题字体          | Newsreader 500                     | h1 60px（手机 38px），卡片标题 26–30px |
 | 正文字体          | IBM Plex Sans 400/500/600          | 15–18px                                |
 | 等宽字体          | IBM Plex Mono 400/500              | 日期、标签、代码                       |
 | 圆角              | 10px 按钮 · 16px 卡片              |                                        |
@@ -129,13 +129,15 @@ kazuha.me 是 Kazuha Mo 的个人主页与作品集：多页面、内容驱动�
 中文回退字体：
 
 - 正文：`'IBM Plex Sans', 'PingFang SC', 'Noto Sans SC', system-ui, sans-serif`
-- 标题：`'Instrument Serif', 'Songti SC', 'Noto Serif SC', Georgia, serif`（Instrument Serif 只有拉丁字符）
+- 标题：`'Newsreader', 'Songti SC', 'Noto Serif SC', Georgia, serif`（只加载了 Newsreader 的拉丁字符）
 
 交互与可读性：
 
 - 可点元素都是真正的 `<a>` 或 `<button>`，有可见文字；纯图标按钮必须有 `aria-label`。
 - 触控区域至少 44×44px；正文对比度至少 4.5:1。
 - 悬停效果只是加分项，不承载信息。
+- 图标统一用 Lucide（`@lucide/astro`）；箭头用 `Arrow` 组件，外链用 `ExternalIcon`，不在文字里写 → ← ↗。
+- 换页用浏览器原生的跨文档 View Transitions（`global.css` 里的 `@view-transition`）：顶栏不动，内容淡入；不支持的浏览器照常跳转，`prefers-reduced-motion` 时关闭。
 - 断点 860px：以下切换为手机布局。
 - 暗色模式放 M3，在 `:root[data-theme=dark]` 下重定义 token。
 
@@ -147,15 +149,15 @@ kazuha.me 是 Kazuha Mo 的个人主页与作品集：多页面、内容驱动�
 2. `NowBadge` + 当前职位胶囊
 3. "Where would you like to go?" 四个入口：Projects、CV、Course Notes（站内 `/notes`）、All my links（桌面 4 列；手机 2×2，隐藏副标题）
 4. 一句话简介（手机上放在入口卡片之后，桌面放在 2 之后）
-5. Featured projects（`featured: true`，2–3 个）+ "All projects →"
+5. Featured projects（`featured: true`，2–3 个）+ "All projects"（带 `Arrow`）
 6. Recent updates（最新 3–5 条）
 7. 有文章后加 "Latest writing"（最新 3 篇）
 
 > 手机第一屏实测：照原型排列时，390×664 可视区域只放得下第一行入口卡片（487–632px），第二行在 644–789px。简介挪到卡片后面、收紧上边距后，四张卡片都能进入第一屏。M2 验收按 390×664 测。
 
-**项目列表 `/projects`**：面包屑、标题、一句说明 → `ProjectFilter` → `ProjectCard` 网格，每张卡底部有 "Read case study →"。
+**项目列表 `/projects`**：面包屑、标题、一句说明 → `ProjectFilter` → `ProjectCard` 网格，每张卡底部有 "Read case study"（带 `Arrow`）。
 
-**项目详情 `/projects/[slug]`**：面包屑、标题、summary → `ProjectMeta` → "View source on GitHub ↗"、"← All projects" → MDX 正文（The problem · How it works · Key decisions · What I'd do differently）→ 上一个 / 下一个项目。
+**项目详情 `/projects/[slug]`**：面包屑、标题、summary → `ProjectMeta` → "View source on GitHub ↗"、"All projects"（左箭头） → MDX 正文（The problem · How it works · Key decisions · What I'd do differently）→ 上一个 / 下一个项目。
 
 **Blog**：列表显示标题、日期、阅读时间、标签、摘要；文章页显示标题、日期、标签、正文、相关项目、返回列表。
 
@@ -170,14 +172,14 @@ kazuha.me 是 Kazuha Mo 的个人主页与作品集：多页面、内容驱动�
 顶栏
 
 - 白底，下边框 1px `--border`；内容最大宽 1120px，左右留白 24px（手机 16px）。
-- 桌面：左边名字（18px / 600，链接回首页）；右边导航项是圆角 10px、高 44px 的文字按钮。当前页用 `--accent-soft` 底、`--accent` 字、600 字重，并设 `aria-current="page"`。导航右侧是语言切换：一个 `--text-3` 色、14px 的普通文字链接，没有边框和高亮，悬停才显示浅灰底。默认语言是英文，不做自动跳转。
+- 桌面：左边名字（18px / 600，链接回首页）；右边导航项是圆角 10px、高 44px 的文字按钮。当前页用 `--accent-soft` 底、`--accent` 字、600 字重，并设 `aria-current="page"`。导航右侧是语言切换：地球仪图标 + 语言名，13px、`--text-3` 色、1px `--border` 描边的全圆角小胶囊（视觉高 30px，点击区域仍为 44px），和导航项区分开。默认语言是英文，不做自动跳转。
 - 手机：只剩名字和描边按钮 "☰ Menu"，展开后变 "✕ Close"。面板是整列 48px 高的大按钮，当前页高亮；底部放语言切换和全宽 Contact me 主按钮。
 
 首页
 
 - Now 胶囊：白底、描边、全圆角，前面 8px 绿色圆点（`#1f9d55`）。
 - 入口卡片：白底、1.5px 描边、圆角 16px、内边距 22px（手机 16px）；左上 44px 圆角方块图标（`--accent-soft` 底、`--accent` 线性图标）；底部动作文字 accent 色 600 字重；悬停时描边变 accent、上浮 2px。
-- 精选项目卡：顶部 150–168px 示意区，下面标题、简介和黑色实心 "Read case study →"。
+- 精选项目卡：顶部 150–168px 示意区，下面标题、简介和黑色实心 "Read case study"（带 `Arrow`）。
 - Recent updates：一张白色圆角卡片分行，左列 110px，等宽字体日期。
 
 项目卡示意图（有截图后由 `cover` 替换）
@@ -196,7 +198,7 @@ kazuha.me 是 Kazuha Mo 的个人主页与作品集：多页面、内容驱动�
 列表页与详情页
 
 - Projects 筛选：全圆角胶囊，选中为黑底白字。
-- 项目详情：内容区 820px；面包屑链接 accent 色；架构图三个方框横排、中间 accent 高亮，手机纵向、箭头转 90°；底部 "← All projects" 和 "Next project →" 两张卡片。
+- 项目详情：内容区 820px；面包屑链接 accent 色；架构图三个方框横排、中间 accent 高亮，手机纵向、箭头转 90°；底部 "All projects"（左箭头） 和 "Next project"（右箭头） 两张卡片。
 - CV：内容区 880px；小节标题 13px、大写、字距 0.08em；左 170px 日期列（手机上下排列）；右上 Download PDF 为 accent 主按钮。
 - Links：左边 44px 彩色字母图标（学校 `#fff5db` / `#8a6100`，我的站点蓝，代码黑，联系方式绿）；网址用等宽字体（手机隐藏）；右边灰底 "Visit ↗"。
 

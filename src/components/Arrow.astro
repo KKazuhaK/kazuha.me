@@ -1,0 +1,13 @@
+---
+import { ArrowLeft, ArrowRight } from '@lucide/astro';
+
+interface Props {
+  dir?: 'left' | 'right';
+  size?: number;
+}
+
+const { dir = 'right', size = 16 } = Astro.props;
+const Icon = dir === 'left' ? ArrowLeft : ArrowRight;
+---
+
+<Icon {size} stroke-width={2.25} class={`arrow-icon ${dir}`} />
