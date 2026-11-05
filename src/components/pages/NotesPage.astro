@@ -1,0 +1,74 @@
+---
+import { getCollection } from 'astro:content';
+import Breadcrumb from '../Breadcrumb.astro';
+import FallbackNotice from '../FallbackNotice.astro';
+import LinkGroup from '../LinkGroup.astro';
+import LinkRow from '../LinkRow.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { displayUrl, isExternalUrl } from '../../config/resolve';
+import { fallbackLang, getLocale, t } from '../../i18n/ui';
+
+const locale = getLocale(Astro.currentLocale);
+const notes = (await getCollection('notes'))
+  .map((e) => e.data)
+  .sort((a, b) => a.order - b.order);
+const schools = [...new Set(notes.map((n) => n.school))];
+
+const title = t(locale, 'notesTitle');
+const intro = t(locale, 'notesIntro');
+const dl = fallbackLang(locale);
+---
+
+<BaseLayout {title} description={intro}>
+  <div class="notes">
+    <div class="head">
+      <Breadcrumb items={[{ label: t(locale, 'nav_notes') }]} />
+      <h1>{title}</h1>
+      <p class="intro">{intro}</p>
+    </div>
+    {locale !== 'en' && <FallbackNotice />}
+    {schools.map((school) => (
+      <LinkGroup title={school} lang={dl}>
+        {notes
+          .filter((n) => n.school === school)
+          .map((n) => (
+            <LinkRow
+              href={n.url}
+              name={n.name}
+              sub={n.sub}
+              display={displayUrl(n.url)}
+              mark={n.mark}
+              cta={n.cta}
+              group="school"
+              lang={dl}
+              external={isExternalUrl(n.url)}
+            />
+          ))}
+      </LinkGroup>
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  .notes {
+    max-width: 820px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+  h1 {
+    margin-top: var(--space-1);
+    font-size: 48px;
+  }
+  .intro {
+    margin-top: 12px;
+    font-size: 17px;
+    color: var(--text-2);
+  }
+  @media (max-width: 859.98px) {
+    h1 {
+      font-size: 38px;
+    }
+  }
+</style>

@@ -9,68 +9,47 @@ import {
 
 interface Props {
   class?: string;
-  /** On 404 pages, link to each locale's home instead of the same path. */
+  /** On 404 pages, link to the other locale's home instead of the same path. */
   notFound?: boolean;
 }
 
 const { class: className, notFound = false } = Astro.props;
 const locale = getLocale(Astro.currentLocale);
 
-const options: { code: Locale; label: string; lang: string }[] = [
-  { code: 'en', label: t(locale, 'langEn'), lang: 'en' },
-  { code: 'zh', label: t(locale, 'langZh'), lang: 'zh-Hans' },
-];
+// A single quiet link to the other language; English stays the default.
+const target: { code: Locale; label: string; lang: string } =
+  locale === 'en'
+    ? { code: 'zh', label: t(locale, 'langZh'), lang: 'zh-Hans' }
+    : { code: 'en', label: t(locale, 'langEn'), lang: 'en' };
 ---
 
-<div
+<a
   class:list={['lang', className]}
-  role="group"
-  aria-label={t(locale, 'language')}
+  href={
+    notFound
+      ? localizedPath(target.code, '/')
+      : pathInLocale(Astro.url.pathname, target.code)
+  }
+  hreflang={target.lang}
+  lang={target.lang}
 >
-  {options.map((o) => (
-    <a
-      href={
-        notFound
-          ? localizedPath(o.code, '/')
-          : pathInLocale(Astro.url.pathname, o.code)
-      }
-      hreflang={o.lang}
-      lang={o.lang}
-      class:list={{ current: o.code === locale }}
-      aria-current={o.code === locale ? 'true' : undefined}
-    >
-      {o.label}
-    </a>
-  ))}
-</div>
+  {target.label}
+</a>
 
 <style>
   .lang {
     display: inline-flex;
     align-items: center;
-    gap: 2px;
-    padding: 2px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-btn);
-    background: var(--surface);
-    font-size: 14px;
-  }
-  a {
-    display: inline-flex;
-    align-items: center;
     justify-content: center;
     min-width: 44px;
     min-height: var(--control-height);
-    padding: 0 10px;
-    border-radius: 8px;
-    color: var(--text-2);
+    padding: 0 12px;
+    border-radius: var(--radius-btn);
+    color: var(--text-3);
+    font-size: 14px;
   }
-  a:hover {
+  .lang:hover {
     background: var(--surface-hover);
-  }
-  a.current {
-    background: var(--accent-soft);
-    color: var(--accent);
-    font-weight: 600;
+    color: var(--text);
   }
 </style>

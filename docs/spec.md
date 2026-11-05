@@ -1,6 +1,6 @@
 # kazuha.me 站点规格
 
-kazuha.me 是 Kazuha Mo 的个人主页与作品集：多页面、内容驱动。kazuha.org 归团队 Kazuha Hub，个人站不放在那里；课程笔记留在 ics.uci.edu/~kazuhak，主站只做外链。
+kazuha.me 是 Kazuha Mo 的个人主页与作品集：多页面、内容驱动。kazuha.org 归团队 Kazuha Hub，个人站不放在那里；各校的课程笔记站留在学校的空间里（目前是 ics.uci.edu/~kazuhak），主站只在 `/notes` 列出并外链过去。
 
 技术决策的理由见 [`decisions/`](decisions/)，日常开发约定见 [`development.md`](development.md)，改内容见 [`content.md`](content.md)。
 
@@ -29,7 +29,7 @@ kazuha.me 是 Kazuha Mo 的个人主页与作品集：多页面、内容驱动�
 
 ## 信息架构与路由
 
-顶栏：Home · Projects · Blog · CV · Links · Notes ↗。顺序和开关都在 `src/config/site.ts` 的 `nav` 里。第一篇文章发布前 Blog 关闭；暂不设 Research，研究作为一个项目放在 Projects 里。
+顶栏：Home · Projects · Blog · CV · Links · Notes。顺序和开关都在 `src/config/site.ts` 的 `nav` 里。第一篇文章发布前 Blog 关闭；暂不设 Research，研究作为一个项目放在 Projects 里。
 
 | 路由               | 页面       | 说明                                                     |
 | ------------------ | ---------- | -------------------------------------------------------- |
@@ -41,6 +41,7 @@ kazuha.me 是 Kazuha Mo 的个人主页与作品集：多页面、内容驱动�
 | `/blog/tags/[tag]` | 标签页     | M3                                                       |
 | `/cv`              | 网页版简历 | 含 "Download PDF"，PDF 放 `public/`                      |
 | `/links`           | 所有链接   | 学校、我的网站、代码、联系方式分组                       |
+| `/notes`           | 课程笔记   | 按学校列出各校的笔记站，数据来自 `notes.yaml`            |
 | `/404`             | 404        | 带回首页按钮；`/zh/404` 为中文版                         |
 | `/zh/...`          | 中文版     | 与英文同结构；缺翻译时显示英文并提示                     |
 | `/rss.xml`         | RSS        | `@astrojs/rss`                                           |
@@ -48,25 +49,26 @@ kazuha.me 是 Kazuha Mo 的个人主页与作品集：多页面、内容驱动�
 外链规则：
 
 - 指向其他站点的链接一律带 ↗ 图标，在新标签页打开（`target="_blank" rel="noopener"`），读屏软件会读出隐藏文字"在新标签页打开"。站内链接始终在当前标签页打开。
-- Notes 地址只在 `site.notesUrl` 写一次，以后换成镜像 kazuha.infp.info 只改这一处。
+- Notes 是站内页面 `/notes`，不直接跳到某所学校。各校笔记站的地址写在 `src/data/notes.yaml`，换学校时加一条，旧的保留。
 - 有正式产出（论文、preprint、poster）后再加 `/research`，并在 `nav` 里打开。
 
 ## 内容模型
 
 会变的内容都在 `src/content/` 和 `src/data/`，页面只负责展示。
 
-| 集合 / 文件  | 位置与 loader                                  | 字段                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| ------------ | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `projects`   | `src/content/projects/{en,zh}/*.mdx`，`glob()` | `title`, `summary`, `kind`（`oss` / `research` / `infra`）, `year`, `role`, `stack: string[]`, `status`（`active` / `done` / `in-progress`）, `featured`, `order`, `cta`（界面文字的键：`readCaseStudy` / `seeContributions` / `readMore`，默认 `readCaseStudy`）, `highlights?: string[]`（卡片示意图里展示的要点，如 PR 标题）, `links: { github?, demo?, paper? }`（`demo` 可写 `notes`，取 `site.notesUrl`）, `cover?`（示意图名称） |
-| `posts`      | `src/content/posts/{en,zh}/*.mdx`，`glob()`    | `title`, `description`, `date`, `updated?`, `tags: string[]`, `draft`, `relatedProject?`                                                                                                                                                                                                                                                                                                                                                 |
-| `updates`    | `src/data/updates.yaml`，`file()`              | `id`, `date`（字符串，`YYYY-MM` 或 `YYYY-MM-DD`，只写已知的精度；页面显示 "Oct 2026"）, `text`, `href?`                                                                                                                                                                                                                                                                                                                                  |
-| `education`  | `src/data/education.yaml`，`file()`            | `id`, `school`, `degree`, `field`, `division?`, `start`, `end`, `expected`, `notes: string[]`, `url`                                                                                                                                                                                                                                                                                                                                     |
-| `research`   | `src/data/research.yaml`，`file()`             | `id`, `title`, `start`, `end?`, `with?`, `summary`                                                                                                                                                                                                                                                                                                                                                                                       |
-| `skills`     | `src/data/skills.yaml`，`file()`               | `id`, `order`, `label`, `items: string[]`                                                                                                                                                                                                                                                                                                                                                                                                |
-| `experience` | `src/data/experience.yaml`，`file()`           | `id`, `title`, `org`, `location`, `start`, `end?`, `mode?`, `summary?`                                                                                                                                                                                                                                                                                                                                                                   |
-| `teaching`   | `src/data/teaching.yaml`，`file()`             | `id`, `order`, `role`, `course`, `courseTitle?`, `org`, `term`, `notes?: string[]`                                                                                                                                                                                                                                                                                                                                                       |
-| `links`      | `src/data/links.yaml`，`file()`                | `id`, `order`, `group`（`school` / `sites` / `code` / `contact`）, `name`, `sub`, `enabled?`（默认 `true`，`false` 时隐藏）, `url`（网址，或 `notes` / `github` / `linkedin` / `email` 之一，由代码从 `site.ts` 取值）, `display?`, `mark`, `cta`                                                                                                                                                                                        |
-| 站点配置     | `src/config/site.ts`                           | `url`, `name`, `tagline`, `intro`, `now: { label, org }`, `role: { title, org }`, `avatar`, `cv: { updated, pdf }`, `email`, `social`, `notesUrl`, `nav`                                                                                                                                                                                                                                                                                 |
+| 集合 / 文件  | 位置与 loader                                  | 字段                                                                                                                                                                                                                                                                                                                                                                                                          |
+| ------------ | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `projects`   | `src/content/projects/{en,zh}/*.mdx`，`glob()` | `title`, `summary`, `kind`（`oss` / `research` / `infra`）, `year`, `role`, `stack: string[]`, `status`（`active` / `done` / `in-progress`）, `featured`, `order`, `cta`（界面文字的键：`readCaseStudy` / `seeContributions` / `readMore`，默认 `readCaseStudy`）, `highlights?: string[]`（卡片示意图里展示的要点，如 PR 标题）, `links: { github?, demo?, paper? }`（都是完整网址）, `cover?`（示意图名称） |
+| `posts`      | `src/content/posts/{en,zh}/*.mdx`，`glob()`    | `title`, `description`, `date`, `updated?`, `tags: string[]`, `draft`, `relatedProject?`                                                                                                                                                                                                                                                                                                                      |
+| `updates`    | `src/data/updates.yaml`，`file()`              | `id`, `date`（字符串，`YYYY-MM` 或 `YYYY-MM-DD`，只写已知的精度；页面显示 "Oct 2026"）, `text`, `href?`                                                                                                                                                                                                                                                                                                       |
+| `education`  | `src/data/education.yaml`，`file()`            | `id`, `school`, `degree`, `field`, `division?`, `start`, `end`, `expected`, `notes: string[]`, `url`                                                                                                                                                                                                                                                                                                          |
+| `research`   | `src/data/research.yaml`，`file()`             | `id`, `title`, `start`, `end?`, `with?`, `summary`                                                                                                                                                                                                                                                                                                                                                            |
+| `skills`     | `src/data/skills.yaml`，`file()`               | `id`, `order`, `label`, `items: string[]`                                                                                                                                                                                                                                                                                                                                                                     |
+| `experience` | `src/data/experience.yaml`，`file()`           | `id`, `title`, `org`, `location`, `start`, `end?`, `mode?`, `summary?`                                                                                                                                                                                                                                                                                                                                        |
+| `teaching`   | `src/data/teaching.yaml`，`file()`             | `id`, `order`, `role`, `course`, `courseTitle?`, `org`, `term`, `notes?: string[]`                                                                                                                                                                                                                                                                                                                            |
+| `links`      | `src/data/links.yaml`，`file()`                | `id`, `order`, `group`（`school` / `sites` / `code` / `contact`）, `name`, `sub`, `enabled?`（默认 `true`，`false` 时隐藏）, `url`（网址；站内路径如 `/notes`，会按当前语言加前缀；或 `github` / `linkedin` / `email` 之一，由代码从 `site.ts` 取值）, `display?`, `mark`, `cta`                                                                                                                              |
+| `notes`      | `src/data/notes.yaml`，`file()`                | `id`, `order`, `school`（`/notes` 上按它分组）, `name`, `sub`, `url`, `mark`, `cta`                                                                                                                                                                                                                                                                                                                           |
+| 站点配置     | `src/config/site.ts`                           | `url`, `name`, `tagline`, `intro`, `now: { label, org }`, `role: { title, org }`, `avatar`, `cv: { updated, pdf }`, `email`, `social`, `nav`                                                                                                                                                                                                                                                                  |
 
 约定：
 
@@ -80,26 +82,26 @@ kazuha.me 是 Kazuha Mo 的个人主页与作品集：多页面、内容驱动�
 
 所有页面套 `BaseLayout`，顶栏和页脚只存在一份。
 
-| 组件                    | 用在               | 职责                                                                   |
-| ----------------------- | ------------------ | ---------------------------------------------------------------------- |
-| `BaseLayout`            | 所有页面           | `<head>`（viewport、SEO、OG、字体）、Header、Footer                    |
-| `Header`                | 所有页面           | 读 `site.nav` 渲染桌面导航和手机菜单，按当前路由高亮                   |
-| `MobileMenu`            | Header             | "Menu / Close" 按钮 + 整列大按钮 + 语言切换 + Contact；`aria-expanded` |
-| `LangSwitch`            | Header、MobileMenu | EN / 中文 两个链接，指向对应语言的同一页面                             |
-| `Footer`                | 所有页面           | 版权、Email / GitHub / All links                                       |
-| `LinkButton`            | 全站               | 实心 / 描边 / 次要三种；外链自动加 ↗；最小高度 44px                    |
-| `QuickLinkTile`         | 首页               | 图标 + 标题 + 副标题 + 动作文字                                        |
-| `NowBadge`              | 首页               | 读 `site.now`                                                          |
-| `ProjectCard`           | 首页、/projects    | 封面或示意图、标签、简介、跳转按钮                                     |
-| `ProjectFilter`         | /projects          | 类别按钮，`aria-pressed`；无脚本时显示全部                             |
-| `ProjectMeta`           | 项目详情           | Role / Year / Stack                                                    |
-| `ArchDiagram`           | 项目详情、MDX      | 方框 + 箭头 SVG，手机纵向                                              |
-| `Breadcrumb`            | 子页面             | Home / Projects / …                                                    |
-| `PostCard` / `PostList` | 首页、/blog        | 标题、日期、标签、摘要                                                 |
-| `TimelineEntry`         | /cv                | 左时间右内容，手机上下排列                                             |
-| `UpdatesList`           | 首页               | 最近动态                                                               |
-| `LinkRow` / `LinkGroup` | /links             | 图标、名称、说明、网址、"Visit ↗"                                      |
-| `Prose`                 | 文章、项目详情     | MDX 正文排版                                                           |
+| 组件                    | 用在               | 职责                                                                                    |
+| ----------------------- | ------------------ | --------------------------------------------------------------------------------------- |
+| `BaseLayout`            | 所有页面           | `<head>`（viewport、SEO、OG、字体）、Header、Footer                                     |
+| `Header`                | 所有页面           | 读 `site.nav` 渲染桌面导航和手机菜单，按当前路由高亮                                    |
+| `MobileMenu`            | Header             | "Menu / Close" 按钮 + 整列大按钮 + 语言切换 + Contact；`aria-expanded`                  |
+| `LangSwitch`            | Header、MobileMenu | 一个不起眼的文字链接，指向另一种语言的同一页面（英文页显示“中文”，中文页显示“English”） |
+| `Footer`                | 所有页面           | 版权、Email / GitHub / All links                                                        |
+| `LinkButton`            | 全站               | 实心 / 描边 / 次要三种；外链自动加 ↗；最小高度 44px                                     |
+| `QuickLinkTile`         | 首页               | 图标 + 标题 + 副标题 + 动作文字                                                         |
+| `NowBadge`              | 首页               | 读 `site.now`                                                                           |
+| `ProjectCard`           | 首页、/projects    | 封面或示意图、标签、简介、跳转按钮                                                      |
+| `ProjectFilter`         | /projects          | 类别按钮，`aria-pressed`；无脚本时显示全部                                              |
+| `ProjectMeta`           | 项目详情           | Role / Year / Stack                                                                     |
+| `ArchDiagram`           | 项目详情、MDX      | 方框 + 箭头 SVG，手机纵向                                                               |
+| `Breadcrumb`            | 子页面             | Home / Projects / …                                                                     |
+| `PostCard` / `PostList` | 首页、/blog        | 标题、日期、标签、摘要                                                                  |
+| `TimelineEntry`         | /cv                | 左时间右内容，手机上下排列                                                              |
+| `UpdatesList`           | 首页               | 最近动态                                                                                |
+| `LinkRow` / `LinkGroup` | /links、/notes     | 图标、名称、说明、网址、"Visit ↗"                                                       |
+| `Prose`                 | 文章、项目详情     | MDX 正文排版                                                                            |
 
 ## 设计规范
 
@@ -143,7 +145,7 @@ kazuha.me 是 Kazuha Mo 的个人主页与作品集：多页面、内容驱动�
 
 1. 头像 + 名字 + tagline（手机上头像 72px、名字 38px，同一行）。`site.avatar` 为 `[占位]` 时显示姓名首字母（KM）的灰色圆盘作为占位头像
 2. `NowBadge` + 当前职位胶囊
-3. "Where would you like to go?" 四个入口：Projects、CV、Course Notes ↗、All my links（桌面 4 列；手机 2×2，隐藏副标题）
+3. "Where would you like to go?" 四个入口：Projects、CV、Course Notes（站内 `/notes`）、All my links（桌面 4 列；手机 2×2，隐藏副标题）
 4. 一句话简介（手机上放在入口卡片之后，桌面放在 2 之后）
 5. Featured projects（`featured: true`，2–3 个）+ "All projects →"
 6. Recent updates（最新 3–5 条）
@@ -159,6 +161,8 @@ kazuha.me 是 Kazuha Mo 的个人主页与作品集：多页面、内容驱动�
 
 **CV `/cv`**：标题 + "Last updated" + Download PDF → Education · Experience · Teaching · Research · Skills，全部来自数据文件。
 
+**Notes `/notes`**：标题 "Course notes" → 按学校分组，每行和 Links 页同样的样式，按钮打开该校的笔记站 ↗。
+
 **Links `/links`**：标题 "Find me elsewhere" → 分组 School · My sites · Code · Contact → 每行图标、名称、说明、网址（手机隐藏）、"Visit ↗"。
 
 ## UI 细节（来自原型）
@@ -166,8 +170,8 @@ kazuha.me 是 Kazuha Mo 的个人主页与作品集：多页面、内容驱动�
 顶栏
 
 - 白底，下边框 1px `--border`；内容最大宽 1120px，左右留白 24px（手机 16px）。
-- 桌面：左边名字（18px / 600，链接回首页）；右边导航项是圆角 10px、高 44px 的文字按钮。当前页用 `--accent-soft` 底、`--accent` 字、600 字重，并设 `aria-current="page"`；Notes 后带 14px ↗ 图标。
-- 手机：只剩名字和描边按钮 "☰ Menu"，展开后变 "✕ Close"。面板是整列 48px 高的大按钮，当前页高亮；Course Notes 一行右侧注明 "ics.uci.edu ↗"；底部放语言切换和全宽 Contact me 主按钮。
+- 桌面：左边名字（18px / 600，链接回首页）；右边导航项是圆角 10px、高 44px 的文字按钮。当前页用 `--accent-soft` 底、`--accent` 字、600 字重，并设 `aria-current="page"`。导航右侧是语言切换：一个 `--text-3` 色、14px 的普通文字链接，没有边框和高亮，悬停才显示浅灰底。默认语言是英文，不做自动跳转。
+- 手机：只剩名字和描边按钮 "☰ Menu"，展开后变 "✕ Close"。面板是整列 48px 高的大按钮，当前页高亮；底部放语言切换和全宽 Contact me 主按钮。
 
 首页
 

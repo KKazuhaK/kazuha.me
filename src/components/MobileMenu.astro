@@ -16,7 +16,6 @@ const locale = getLocale(Astro.currentLocale);
 const contactHref = isPlaceholder(site.email)
   ? localizedPath(locale, '/links')
   : `mailto:${site.email}`;
-const notesHost = new URL(site.notesUrl).host;
 const ICON_OPEN = 'M4 7h16M4 12h16M4 17h16';
 const ICON_CLOSE = 'M6 6l12 12M18 6L6 18';
 ---
@@ -61,7 +60,7 @@ const ICON_CLOSE = 'M6 6l12 12M18 6L6 18';
           <span>{item.mobileLabel}</span>
           {item.external && (
             <span class="aside">
-              {notesHost} <ExternalIcon size={13} />
+              <ExternalIcon size={13} />
             </span>
           )}
         </a>

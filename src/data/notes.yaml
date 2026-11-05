@@ -1,0 +1,9 @@
+# One entry per school. Add a new entry when notes live somewhere new; keep the old ones.
+- id: uci
+  order: 1
+  school: UC Irvine
+  name: UC Irvine course notes
+  sub: Study notes for my CS courses, on my UCI web space
+  url: https://ics.uci.edu/~kazuhak/
+  mark: UCI
+  cta: Open
