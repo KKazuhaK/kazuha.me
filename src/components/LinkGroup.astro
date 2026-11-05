@@ -1,13 +1,15 @@
 ---
 interface Props {
   title: string;
+  /** Language of the title when it differs from the page. */
+  lang?: string;
 }
 
-const { title } = Astro.props;
+const { title, lang } = Astro.props;
 ---
 
 <section>
-  <h2>{title}</h2>
+  <h2 {lang}>{title}</h2>
   <div class="rows">
     <slot />
   </div>

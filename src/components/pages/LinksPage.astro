@@ -30,7 +30,7 @@ const rows = (await getCollection('links'))
     const internal = resolved.startsWith('/');
     const href = internal ? localizedPath(locale, resolved) : resolved;
     const display =
-      item.display ?? displayUrl(internal ? site.url + resolved : resolved);
+      item.display ?? displayUrl(internal ? site.url + href : resolved);
     return [{ ...item, href, display }];
   });
 

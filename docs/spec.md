@@ -1,6 +1,6 @@
 # kazuha.me 站点规格
 
-kazuha.me 是 Kazuha Mo 的个人主页与作品集：多页面、内容驱动。kazuha.org 归团队 Kazuha Hub，个人站不放在那里；课程笔记留在 ics.uci.edu/~kazuhak，主站只做外链。
+kazuha.me 是 Kazuha Mo 的个人主页与作品集：多页面、内容驱动。kazuha.org 归团队 Kazuha Hub，个人站不放在那里；各校的课程笔记站留在学校的空间里（目前是 ics.uci.edu/~kazuhak），主站只在 `/notes` 列出并外链过去。
 
 技术决策的理由见 [`decisions/`](decisions/)，日常开发约定见 [`development.md`](development.md)，改内容见 [`content.md`](content.md)。
 
@@ -100,7 +100,7 @@ kazuha.me 是 Kazuha Mo 的个人主页与作品集：多页面、内容驱动�
 | `PostCard` / `PostList` | 首页、/blog        | 标题、日期、标签、摘要                                                                  |
 | `TimelineEntry`         | /cv                | 左时间右内容，手机上下排列                                                              |
 | `UpdatesList`           | 首页               | 最近动态                                                                                |
-| `LinkRow` / `LinkGroup` | /links             | 图标、名称、说明、网址、"Visit ↗"                                                       |
+| `LinkRow` / `LinkGroup` | /links、/notes     | 图标、名称、说明、网址、"Visit ↗"                                                       |
 | `Prose`                 | 文章、项目详情     | MDX 正文排版                                                                            |
 
 ## 设计规范

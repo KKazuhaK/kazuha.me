@@ -28,7 +28,7 @@ const dl = fallbackLang(locale);
     </div>
     {locale !== 'en' && <FallbackNotice />}
     {schools.map((school) => (
-      <LinkGroup title={school}>
+      <LinkGroup title={school} lang={dl}>
         {notes
           .filter((n) => n.school === school)
           .map((n) => (
