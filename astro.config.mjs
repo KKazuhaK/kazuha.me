@@ -6,7 +6,7 @@ import sitemap from '@astrojs/sitemap';
 import { existsSync } from 'node:fs';
 import { rename, rmdir, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { URL, fileURLToPath } from 'node:url';
 
 // Cloudflare's `404-page` mode looks for the nearest 404.html, so move zh/404/index.html to zh/404.html.
 /** @type {import('astro').AstroIntegration} */
